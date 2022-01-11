@@ -1,0 +1,40 @@
+<%- include('header') %>
+
+<div class="container">
+    <h2>Ticket tracking application</h2>
+    <form action="/ticket-tool" method="post">
+        <div class="mb-3">
+            <input autofocus type="number" class="form-control shadow-none mb-3" id="inputTicket" placeholder="Enter the ticket number" *" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="Ticket">
+            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputDescr" placeholder="Enter the ticket description" name="DESCR" list="resol">
+            <datalist id="resol">
+                <% resolution.forEach((resolution, index)=>{%>
+                    <option id=<%= resolution.CATEGORY%>>
+                        <%= resolution.CATEGORY %></option>
+                    <%})%>
+            </datalist>
+            <select class="form-select shadow-none" id="inputCategory" name="CATEGORY">
+                <option value="Incident">Incident</option>
+                <option value="Service Request">Service Request</option>
+            </select>
+            <br>
+            <textarea autofocus class="form-control shadow-none mb-3" id="inputComment" name="COMMENT" placeholder="Enter the detailed description"></textarea>
+            <select class="form-select shadow-none" id="inputUser" name="USER">
+                <% users_.forEach((users_, index)=>{%>
+                    <option id=<%= users_.user%>>
+                        <%= users_.user %></option>
+                    <%})%>
+            </select>
+            <br>
+            <select class="form-select shadow-none" id="inputApp" name="APP">
+                <% app_nm.forEach((app_nm, index)=>{%>
+                    <option id=<%= app_nm.name%>>
+                        <%= app_nm.name %></option>
+                    <%})%>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">SUBMIT</button>
+    </form>
+</div>
+
+<%- include('footer') %>
+
