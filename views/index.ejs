@@ -1,11 +1,17 @@
 <%- include('header') %>
-
+<br>
 <div class="container">
-    <h2>Ticket tracking application</h2>
+    <h2 class="heading">TICKET TRACKING APPLICATION</h2>
     <form action="/ticket-tool" method="post">
         <div class="mb-3">
-            <input autofocus type="number" class="form-control shadow-none mb-3" id="inputTicket" placeholder="Enter the ticket number" *" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="Ticket">
-            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputDescr" placeholder="Enter the ticket description" name="DESCR" list="resol">
+            <% if (errors.Ticket) { %>
+                <div class="text-danger mb-3"><%= errors.Ticket.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputTicket" placeholder="Enter the ticket number *" *" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="Ticket">
+            <% if (errors.DESCR) { %>
+                <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputDescr" placeholder="Enter the ticket description *" name="DESCR" list="resol">
             <datalist id="resol">
                 <% resolution.forEach((resolution, index)=>{%>
                     <option id=<%= resolution.CATEGORY%>>
@@ -17,7 +23,10 @@
                 <option value="Service Request">Service Request</option>
             </select>
             <br>
-            <textarea autofocus class="form-control shadow-none mb-3" id="inputComment" name="COMMENT" placeholder="Enter the detailed description"></textarea>
+            <% if (errors.COMMENT) { %>
+                <div class="text-danger mb-3"><%= errors.COMMENT.msg %></div>
+            <% } %>
+            <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT" placeholder="Enter the detailed description *"></textarea>
             <select class="form-select shadow-none" id="inputUser" name="USER">
                 <% users_.forEach((users_, index)=>{%>
                     <option id=<%= users_.user%>>

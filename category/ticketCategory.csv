@@ -1,10 +1,86 @@
 CATEGORY
 Order closure - XML Failure
-Charge Transfer - Profile Correction
-Backend Update - Service Precedence and Service Abbreviation
-Backend Update - Toll-Free number removal/Order Elimination for Optimus Orders
-Old charge id update
-Pilot activity-Owner/Service Configuration
-REPC-Cramer Job failure
-Application Latency
+Order closure - Vendor Org 0
+Order closure - Circt qty 0
+Order Closure - No Completion Date
+Order closure - Local Loop Expertise
+Order Closure - PO has one qty to use for Cancel/Reprovide scenario
+Order closure - PO Duplication
+Backend Update - CDD
+Backend Update - Commercials
+Backend Update - Contract Term
+Backend Update - Prov Ready Date
+Backend Update - CPE
+Backend Update - LM Speed
+Backend Update - PO details update in charge screen
+Backend Update - Circuit/Port speed
+Backend Update - Viznet Id
+Backend Update - Device Name
+User Request - Trigger notification
+Backend Update - Billable ID
+Backend Update - Prisec circuit ID
 Circuit Fetching - PO details Updated for Cramer fetched circuit
+Circuit Fetching - Tech order exclusion
+User Request - Script/Data Extract
+User Request - Script/Data Extract
+Access Request - Roles mapping
+Access Request - GAM Fulfilment
+Backend Update - Basket reopen
+Backend Update - PM Basket Approval
+User Request - Info Currency
+Bill Start Date Update for Data Orders
+Old charge Id update in the latest MACD order
+Charge Transfer - Retrigger charges
+Charge Transfer - Profile Correction
+User Request - Profile, SECS, Entity update
+Termination Date Update for Data Orders
+Backend Update - Price plan
+Backend Update - Dummy Order
+Backend Update - Service Precedence and Service Abbreviation
+User Request - Owner and Service Configuration
+User Request - SL_XREF update
+Application Latency - Multi user sessions
+Application Latency - Multi user sessions
+User Request - Mail ID configuration
+Implementation Date for Voice Orders
+Backend Update - Request Date for Voice Orders
+Cancellation Date for Voice Orders
+Supplier/Customer Migration/Numbering Plan Change Request
+Backend Update - Routing Number for Voice Orders
+User Request - Interconnect ID generation
+Backend Update - Outpulse/Outgoing Digit/Outgoing Suma4 updated for Optimus Orders
+Backend Update - Outpulse/Outgoing Digit/Outgoing Suma4 updated for Tiger Orders
+Backend Update - Parent ID for Voice Orders
+Backend Update - Project name for Voice Orders
+Backend Update - SFDC ID for Voice Orders
+Backend Update - Circle Name for CLLIs
+Backend Update - Due Date update for VOIP Orders
+Backend Update - Toll-Free number removal/Order Elimination for Optimus Orders
+Backend Update - Toll-Free number removal/Order Elimination for TIGER generated Orders
+Backend Update - Roadblock
+Backend Update - Change of City for Voice Orders
+Backend Update - End User Name for Voice Orders
+Backend Update - Entity change for Voice Orders
+User Request - Order Status change
+Piloting Activity - Speed Configuration
+Backend Update - Service for Voice Orders
+Backend Update -  Customer Email ID for Voice Orders
+Backend Update - Charge for Optimus Orders
+Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders
+Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for TIGER generated Orders
+Backend Update - Project Manager change
+Backend Update - Invoice Group Start Date 
+Backend Update - Service Class
+Backend Update - Voice Order Closure - XML FAILURE
+REPC - Functional Issue
+Tiger - Functional Issue
+REPC - Other Incident
+Tiger - Other Incident
+REPC - Other Requests
+Tiger - Other Requests
+Tiger/REPC - Application not working
+User Request - Site related Modifications
+Backend Update - Provisioning Ready Date
+Backend Update - CMS ID for VOIP Orders
+Charge Transfer - SECS Change order
+Backend Update - Charge for Tiger Voice Orders

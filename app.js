@@ -11,6 +11,8 @@ app.set('views', path.resolve(__dirname, 'views'));
 app.use(express.urlencoded({extended:true}));
 app.use(bodyParser.urlencoded({extended:false}));
 
+app.use("/public", express.static(__dirname + "/public"));
+
 app.get('/check', (req, res) => {
     res.send('Testing...');
 });

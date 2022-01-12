@@ -26,9 +26,22 @@ const ticketCategory = (callback) => {
     });
 };
 
+const exportAllCSV = (callback) => {
+    const sql = "SELECT * FROM tickets ORDER BY TICKET DESC";
+
+    database.appDatabase.all(sql, [], (err, rows) => {
+        if (err) {
+            callback(err.message);
+        }
+        
+        callback(rows);
+    });
+};
+
 
 module.exports = {
     insertTicket,
-    ticketCategory
+    ticketCategory,
+    exportAllCSV
 };
 
