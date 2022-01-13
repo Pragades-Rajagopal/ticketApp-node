@@ -1,7 +1,7 @@
 <%- include('header') %>
 <br>
 <div class="container">
-    <h2 class="heading">TICKET TRACKING APPLICATION</h2>
+    <h3 class="heading">TICKET TRACKING APPLICATION</h3>
     <form action="/ticket-tool" method="post">
         <div class="mb-3">
             <% if (errors.Ticket) { %>
@@ -18,23 +18,21 @@
                         <%= resolution.CATEGORY %></option>
                     <%})%>
             </datalist>
-            <select class="form-select shadow-none" id="inputCategory" name="CATEGORY">
+            <select class="form-select shadow-none mb-3" id="inputCategory" name="CATEGORY">
                 <option value="Incident">Incident</option>
                 <option value="Service Request">Service Request</option>
             </select>
-            <br>
             <% if (errors.COMMENT) { %>
                 <div class="text-danger mb-3"><%= errors.COMMENT.msg %></div>
             <% } %>
             <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT" placeholder="Enter the detailed description *"></textarea>
-            <select class="form-select shadow-none" id="inputUser" name="USER">
+            <select class="form-select shadow-none mb-3" id="inputUser" name="USER">
                 <% users_.forEach((users_, index)=>{%>
                     <option id=<%= users_.user%>>
                         <%= users_.user %></option>
                     <%})%>
             </select>
-            <br>
-            <select class="form-select shadow-none" id="inputApp" name="APP">
+            <select class="form-select shadow-none mb-3" id="inputApp" name="APP">
                 <% app_nm.forEach((app_nm, index)=>{%>
                     <option id=<%= app_nm.name%>>
                         <%= app_nm.name %></option>

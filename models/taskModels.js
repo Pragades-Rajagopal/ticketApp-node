@@ -38,10 +38,49 @@ const exportAllCSV = (callback) => {
     });
 };
 
+const exportPrevious = (mon, callback) => {
+    const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+
+    database.appDatabase.all(sql, [mon], (err, rows) => {
+        if (err) {
+            callback(err.message);
+        }
+
+        callback(rows);
+    });
+};
+
+const searchTicket = (ticket, callback) => {
+    const sql = "SELECT * FROM tickets where TICKET = ?";
+
+    database.appDatabase.get(sql, [ticket], (err, row) => {
+        if (err) {
+            callback(err.message);
+        }
+        
+        callback(row);
+    });
+};
+
+const getCount = () => {
+    const sql = "SELECT count(*) FROM tickets";
+
+    database.appDatabase.get(sql, [], (err, results) => {
+        if (err) {
+            callback(err.message);
+        }
+
+        return results;
+    });
+};
+
 
 module.exports = {
     insertTicket,
     ticketCategory,
-    exportAllCSV
+    exportAllCSV,
+    searchTicket,
+    getCount,
+    exportPrevious
 };
 

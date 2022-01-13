@@ -1,6 +1,35 @@
 .heading {
-    background-color: rgb(82, 67, 182);
-    color: wheat;
+    background-color: rgb(152, 178, 225);
+    color: black;
     text-align: center;
     text-decoration: solid;
+    border-radius: 10px;
+}
+
+.subHeading {
+    text-align: center;
+    text-decoration: wavy;
+}
+
+.bg-exp {
+    background-color: blueviolet;
+}
+
+/* .nav-val {
+    color: black !important;
+    ;
+} */
+
+html {
+    zoom: 95%;
+}
+
+.mb-3 {
+    border-radius: 10px;
+}
+
+
+element { 
+    padding-left: 200px !important;
+    padding-right: 200px !important;
 }
