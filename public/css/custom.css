@@ -12,13 +12,18 @@
 }
 
 .bg-exp {
-    background-color: blueviolet;
+    background-color: slateblue;
 }
 
 /* .nav-val {
     color: black !important;
     ;
 } */
+
+.cpny-lg {
+    background-color: slateblue;
+    border-radius: 10px;
+}
 
 html {
     zoom: 95%;
@@ -28,8 +33,12 @@ html {
     border-radius: 10px;
 }
 
+.searchbox {
+    border-radius: 3px;
+}
 
-element { 
-    padding-left: 200px !important;
-    padding-right: 200px !important;
+.gear {
+    text-align: center;
+    size: 10px !important;
+
 }

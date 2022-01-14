@@ -8,6 +8,9 @@ router.post('/ticket-tool', taskValidator.validateTask, taskController.index_pag
 router.get('/ticket-tool/exportAll', taskController.exportAllCSV);
 router.post('/ticket-tool/search', taskController.search_ticket);
 router.get('/ticket-tool/export', taskController.exportPrevMon);
+router.get('/ticket-tool/viewdata', taskController.getTicketData);
+router.get('/ticket-tool/config', taskController.newResolution_get);
+router.post('/ticket-tool/config', taskValidator.validateTask, taskController.newResolution_put);
 
 module.exports = router;
 

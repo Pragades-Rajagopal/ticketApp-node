@@ -62,6 +62,18 @@ const searchTicket = (ticket, callback) => {
     });
 };
 
+const getData = (mon, callback) => {
+    const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+
+    database.appDatabase.all(sql, [mon], (err, rows) => {
+        if (err) {
+            callback(err.message);
+        }
+
+        callback(rows);
+    });
+};
+
 const getCount = () => {
     const sql = "SELECT count(*) FROM tickets";
 
@@ -81,6 +93,7 @@ module.exports = {
     exportAllCSV,
     searchTicket,
     getCount,
-    exportPrevious
+    exportPrevious,
+    getData
 };
 

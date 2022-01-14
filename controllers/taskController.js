@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const fastcsv = require('fast-csv');
 
+
 let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
 let curMON = moment.utc().format('MMMYYYY');
 
@@ -20,23 +21,19 @@ const getTicketCount = () => {
 
 function index_page_get (req, res) {
 
-    let count = getTicketCount();
-    console.log(count);
-
     taskModel.ticketCategory((resolution) => {
-        res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON, count:count, errors:{}});
+        res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON, curMON: curMON, errors:{}});
     });
     
 };
 
 function index_page_post (req, res) {
-    let count = getTicketCount();
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         
         taskModel.ticketCategory((resolution) => {
-            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON, count:count, errors:errors.mapped()});
+            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON, curMON: curMON, errors:errors.mapped()});
             
         });
         return;
@@ -52,7 +49,7 @@ function index_page_post (req, res) {
     let MON = moment.utc().format('MMMYYYY');
 
     taskModel.searchTicket(TICKET, (result) => {
-        console.log(result);
+        // console.log(result);
         if (result) {
             res.send ("<h2 class='subHeading'>Ticket "+ TICKET +" already exist!!</h2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
             // const err = new Error('Ticket already exist!');
@@ -62,7 +59,7 @@ function index_page_post (req, res) {
         }
 
         taskModel.insertTicket(TICKET, DESCR, CATEGORY, COMMENT, USER, APP, timeGMT, MON, (result) => {
-            console.log(result);
+            // console.log(result);
             res.redirect('/ticket-tool');
         });
     });
@@ -71,29 +68,35 @@ function index_page_post (req, res) {
 function search_ticket (req, res) {
 
     const ticket = req.body.ticketnum;
-    let count = getTicketCount();
 
     taskModel.searchTicket(ticket, (result) => {
-        console.log(result);
+        // console.log(result);
         if (!result) {
             res.send ("<H2 class='subHeading'>Ticket "+ ticket +" does not exist!!</H2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
             return;
         }
         
-        res.render('search', {result: result, prevMON:prevMON, count:count});
+        res.render('search', {result: result, curMON: curMON, prevMON:prevMON});
     });
 
 };
 
+function getTicketData (req, res) {
+
+    taskModel.getData(curMON, (result) => {
+        res.render('viewdata', {result: result, prevMON: prevMON, curMON: curMON});
+    });
+};
+
 function exportAllCSV (req, res) {
     taskModel.exportAllCSV((result) => {
-        console.log(result);
+        // console.log(result);
 
         const filePath = path.resolve(__dirname, '../', 'public');
         let time = moment.utc().format('YYYYMMDDhhmmss');
         const filename = 'ticketAll_' + time + '.csv';
         const endPath = filePath + '\\' + filename;
-        console.log(endPath);
+        // console.log(endPath);
 
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
@@ -107,13 +110,13 @@ function exportAllCSV (req, res) {
 
 function exportPrevMon (req, res) {
     taskModel.exportPrevious(prevMON, (result) => {
-        console.log(result);
+        // console.log(result);
 
         const filePath = path.resolve(__dirname, '../', 'public');
         let time = moment.utc().format('YYYYMMDDhhmmss');
         const filename = 'ticket_'+ prevMON +'_' + time + '.csv';
         const endPath = filePath + '\\' + filename;
-        console.log(endPath);
+        // console.log(endPath);
 
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
@@ -124,12 +127,38 @@ function exportPrevMon (req, res) {
     });
 };
 
+function newResolution_get (req, res) {
+
+    res.render('config', {curMON: curMON, prevMON: prevMON, errors:{}});
+};
+
+function newResolution_put (req, res) {
+
+    const resolution = req.body.DESCR;
+    const filePath = path.resolve(__dirname, '../', 'category', 'ticketCategory.csv');
+    // console.log(resolution, filePath);
+    
+    let ws = fs.createWriteStream(filePath, { flags: 'a' });
+    fastcsv.
+    write([
+        {CATEGOTY: resolution}
+        ], 
+        { headers:false, 
+        includeEndRowDelimiter: true })
+        .pipe(ws);
+    
+    res.render('config', {curMON: curMON, prevMON: prevMON, errors:{}});    
+}
+
 
 module.exports = {
     index_page_get,
     index_page_post,
     exportAllCSV,
     search_ticket,
-    exportPrevMon
+    exportPrevMon,
+    getTicketData,
+    newResolution_get,
+    newResolution_put
 };
 

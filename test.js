@@ -1,10 +1,10 @@
-const moment = require('moment');
+// const moment = require('moment');
 
-let utc = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
+// let utc = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+// let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
 
-console.log(utc);
-console.log(MON);
+// console.log(utc);
+// console.log(MON);
 
 // const path = require('path');
 // // // console.log(path.resolve(__dirname, 'database', 'data.sqlite3'));
@@ -65,3 +65,24 @@ console.log(MON);
 //     });
 // });
 
+const { Console } = require("console");
+// get fs module for creating write streams
+// const fs = require("fs");
+const path = require('path');
+const fileLogs = path.resolve(__dirname, 'logs', 'logs.txt');
+const fileError = path.resolve(__dirname, 'logs', 'error.txt');
+
+// make a new logger
+// const myLogger = new Console({
+//   stdout: fs.createWriteStream(fileLogs),
+//   stderr: fs.createWriteStream(fileError),
+// });
+
+// // saving to normalStdout.txt file
+// myLogger.log("Hello! This will be saved in normalStdout.txt file");
+
+// // saving to errStdErr.txt file
+// myLogger.error("Its an error ❌. This will be saved in errStdErr.txt file");
+const fs = require('fs');
+const myConsole = new console.Console(fs.createWriteStream(fileLogs));
+myConsole.log('hello world!!!');

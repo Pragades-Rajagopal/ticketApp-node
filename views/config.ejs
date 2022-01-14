@@ -1,0 +1,13 @@
+<%- include('header') %>
+<br>
+<div class="container">
+    <form action="/ticket-tool/config" method="post">
+        <div class="mb-3">
+            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the new resolution *" name="DESCR">
+        </div>
+        <button type="submit" class="btn btn-primary">SUBMIT</button>
+        <a class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+    </form> 
+</div>
+
+<%- include('footer') %>
