@@ -11,6 +11,19 @@ exports.validateTask = [
 
     check('COMMENT')
     .isLength({min:1})
-    .withMessage("Detailed desctiption is mandatory. Mention NA")
+    .withMessage("Detailed description is mandatory. Mention NA"),
+
+    check('USER')
+    .isLength({min:1})
+    .withMessage("Resolved by is mandatory"),
+
+    check('APP')
+    .isLength({min:1})
+    .withMessage("Application name is mandatory"),
+
+    check('CATEGORY')
+    .isLength({min:1})
+    .withMessage("Ticket category is mandatory")
 ];
+
 

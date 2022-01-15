@@ -18,26 +18,38 @@
                         <%= resolution.CATEGORY %></option>
                     <%})%>
             </datalist>
-            <select class="form-select shadow-none mb-3" id="inputCategory" name="CATEGORY">
-                <option value="Incident">Incident</option>
-                <option value="Service Request">Service Request</option>
-            </select>
+            <% if (errors.CATEGORY) { %>
+                <div class="text-danger mb-3"><%= errors.CATEGORY.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputCategory" placeholder="Enter the ticket category *" name="CATEGORY" list="category">
+            <datalist id="category">
+                <option value="Incident">
+                <option value="Service Request">
+            </datalist>
             <% if (errors.COMMENT) { %>
                 <div class="text-danger mb-3"><%= errors.COMMENT.msg %></div>
             <% } %>
             <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT" placeholder="Enter the detailed description *"></textarea>
-            <select class="form-select shadow-none mb-3" id="inputUser" name="USER">
-                <% users_.forEach((users_, index)=>{%>
+            <% if (errors.USER) { %>
+                <div class="text-danger mb-3"><%= errors.USER.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputUser" placeholder="Select user *" name="USER" list="user">
+            <datalist id="user">
+                <% users_.forEach((users_)=>{%>
                     <option id=<%= users_.user%>>
                         <%= users_.user %></option>
                     <%})%>
-            </select>
-            <select class="form-select shadow-none mb-3" id="inputApp" name="APP">
-                <% app_nm.forEach((app_nm, index)=>{%>
-                    <option id=<%= app_nm.name%>>
+            </datalist>
+            <% if (errors.APP) { %>
+                <div class="text-danger mb-3"><%= errors.APP.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputApp" placeholder="Select application *" name="APP" list="app">
+            <datalist id="app">
+                <% app_nm.forEach((app_nm)=>{%>
+                    <option id=<%= users_.user%>>
                         <%= app_nm.name %></option>
                     <%})%>
-            </select>
+            </datalist>
         </div>
         <button type="submit" class="btn btn-primary">SUBMIT</button>
     </form>
