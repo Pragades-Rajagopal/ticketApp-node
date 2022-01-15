@@ -22,7 +22,7 @@ const getTicketCount = () => {
 function index_page_get (req, res) {
 
     taskModel.ticketCategory((resolution) => {
-        res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON, curMON: curMON, errors:{}});
+        res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON.toUpperCase(), curMON: curMON.toUpperCase(), errors:{}});
     });
     
 };
@@ -33,7 +33,7 @@ function index_page_post (req, res) {
     if (!errors.isEmpty()) {
         
         taskModel.ticketCategory((resolution) => {
-            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON, curMON: curMON, errors:errors.mapped()});
+            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON.toUpperCase(), curMON: curMON.toUpperCase(), errors:errors.mapped()});
             
         });
         return;
@@ -76,7 +76,7 @@ function search_ticket (req, res) {
             return;
         }
         
-        res.render('search', {result: result, curMON: curMON, prevMON:prevMON});
+        res.render('search', {result: result, curMON: curMON.toUpperCase(), prevMON:prevMON.toUpperCase()});
     });
 
 };
@@ -84,15 +84,16 @@ function search_ticket (req, res) {
 function getTicketData (req, res) {
 
     taskModel.getData(curMON, (result) => {
-        res.render('viewdata', {result: result, prevMON: prevMON, curMON: curMON});
+        res.render('viewdata', {result: result, prevMON: prevMON.toUpperCase(), curMON: curMON.toUpperCase()});
     });
 };
 
 function exportAllCSV (req, res) {
+    
     taskModel.exportAllCSV((result) => {
         // console.log(result);
 
-        const filePath = path.resolve(__dirname, '../', 'public');
+        const filePath = path.resolve(__dirname, '../', 'public', 'exports');
         let time = moment.utc().format('YYYYMMDDhhmmss');
         const filename = 'ticketAll_' + time + '.csv';
         const endPath = filePath + '\\' + filename;
@@ -101,7 +102,7 @@ function exportAllCSV (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<a href='/public/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
+            res.send("<a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
         })
         .pipe(ws);
 
@@ -109,10 +110,11 @@ function exportAllCSV (req, res) {
 };
 
 function exportPrevMon (req, res) {
+    
     taskModel.exportPrevious(prevMON, (result) => {
         // console.log(result);
 
-        const filePath = path.resolve(__dirname, '../', 'public');
+        const filePath = path.resolve(__dirname, '../', 'public', 'exports');
         let time = moment.utc().format('YYYYMMDDhhmmss');
         const filename = 'ticket_'+ prevMON +'_' + time + '.csv';
         const endPath = filePath + '\\' + filename;
@@ -121,7 +123,7 @@ function exportPrevMon (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<a href='/public/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
+            res.send("<a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
         })
         .pipe(ws);
     });
@@ -129,7 +131,7 @@ function exportPrevMon (req, res) {
 
 function newResolution_get (req, res) {
 
-    res.render('config', {curMON: curMON, prevMON: prevMON, errors:{}});
+    res.render('config', {curMON: curMON.toUpperCase(), prevMON: prevMON.toUpperCase(), errors:{}});
 };
 
 function newResolution_put (req, res) {
@@ -147,8 +149,12 @@ function newResolution_put (req, res) {
         includeEndRowDelimiter: true })
         .pipe(ws);
     
-    res.render('config', {curMON: curMON, prevMON: prevMON, errors:{}});    
+    res.render('config', {curMON: curMON.toUpperCase(), prevMON: prevMON.toUpperCase(), errors:{}});    
 }
+
+function insight_page (req, res) {
+    res.render('insights');
+};
 
 
 module.exports = {
@@ -159,6 +165,7 @@ module.exports = {
     exportPrevMon,
     getTicketData,
     newResolution_get,
-    newResolution_put
+    newResolution_put,
+    insight_page
 };
 

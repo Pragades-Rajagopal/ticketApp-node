@@ -1,4 +1,12 @@
 APP_NM,TICKET,RESOLUTION,TICKET_TYPE,COMMENT,CREATED_ON,MON,RESOLVED_BY
+RERT,10033988,Pilot activity - City Configuration,Service Request,NA,2022/01/14 02:45:53,Jan2022,Saibhargavi
+REPC,10033987,Backend Update - Toll-Free number removal/Order Elimination for Optimus Orders,Service Request,NA,2022/01/14 02:36:12,Jan2022,Surandranath
+REPC,10033980,Application Latency - Multi user sessions,Incident,NA,2022/01/14 01:04:02,Jan2022,Surandranath
+REACT,10033973,REACT - Housekeeping activity,Service Request,Monthly activity,2022/01/14 12:39:22,Jan2022,Pragadeswar
+REPC,10033970,Circuit Fetching - PO details Updated for Cramer fetched circuit,Incident,NA,2022/01/14 12:31:27,Jan2022,Bharat
+REACT,10033964,REACT - server restart,Service Request,Tekelec servers restart,2022/01/14 12:27:51,Jan2022,Sucharitha
+REPC,10033963,Charge Transfer - SECS Change order,Incident,NA,2022/01/14 10:18:54,Jan2022,Pragadeswar
+REPC,10033962,Cancellation Date for Voice Orders,Service Request,NA,2022/01/13 06:56:13,Jan2022,Sucharitha
 REPC,10033961,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,Service Request,Requirement is in place (Optimus team),2022/01/13 06:35:45,Jan2022,Surandranath
 MSPS,10033960,MSPS - Functional Issue,Incident,"2022-01-10 01:10:00,166 [MSPS-EMAIL-ENGINE_Worker-1] INFO  - EMAILCONFIG_JOB_GROUP.EMAILCONFIG_JOB_272 Job Executing now... at Mon Jan 10 01:10:00 GMT 2022, Attempt - 1
 2022-01-10 01:10:00,174 [MSPS-EMAIL-ENGINE_Worker-1] INFO  - Fetch the SQL Query from the record for id 5514677
@@ -14,3 +22,5 @@ REPC,10033927,Backend Update - Service Precedence and Service Abbreviation,Incid
 TIGER,10033926,Application Latency,Service Request,NA,2022/01/11 07:21:52,Jan2022,Saibhargavi
 RERT,10033922,Pilot activity-Owner/Service Configuration,Service Request,NA,2022/01/11 07:23:27,Jan2022,Sucharitha
 MSPS,10033921,REPC - Other Requests,Service Request,NA,2022/01/12 06:32:48,Jan2022,Pragadeswar
+REPC,10033910,Application Latency - Multi user sessions,Incident,NA,2021/12/12 06:32:48,Dec2021,Pragadeswar
+TIGER,10033900,Order closure - XML Failure,Incident,NA,2021/12/12 06:32:48,Dec2021,Bharat
