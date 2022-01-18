@@ -51,7 +51,7 @@ function index_page_post (req, res) {
     taskModel.searchTicket(TICKET, (result) => {
         // console.log(result);
         if (result) {
-            res.send ("<h2 class='subHeading'>Ticket "+ TICKET +" already exist!!</h2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
+            res.send ("<title>Zoinks!</title><h2 class='subHeading'>Ticket <u>"+ TICKET +"</u> was already catogorized under '<u><i>"+ result.RESOLUTION +"</i></u>' resolution by "+ result.RESOLVED_BY +"!!</h2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
             // const err = new Error('Ticket already exist!');
             // err.statusCode = 404;
             // res.status(404).send({error: err.message});
@@ -72,7 +72,7 @@ function search_ticket (req, res) {
     taskModel.searchTicket(ticket, (result) => {
         // console.log(result);
         if (!result) {
-            res.send ("<H2 class='subHeading'>Ticket "+ ticket +" does not exist!!</H2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
+            res.send ("<title>Zoinks!</title><H2 class='subHeading'>Ticket "+ ticket +" does not exist!!</H2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
             return;
         }
         
