@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png"  href="/favicon/ticket64.png">
+    <link rel="icon" type="image/png"  href="/public/favicon/ticket64.png">
     <title>Ticket tool</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom.css">
@@ -18,21 +18,46 @@
             </button>
             <div class="collapse navbar-collapse me-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-                    
-                    <li class="nav-item">
-                        <a class="nav-link nav-val" href="/ticket-tool/viewdata">VIEW FOR <%= curMON %></a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link nav-val" href="/ticket-tool/export">EXPORT FOR <%= prevMON %></a>
-                    </li> 
                     <li class="nav-item">
                         <a class="nav-link nav-val" href="/ticket-tool/exportAll">EXPORT ALL</a>
                     </li> 
                 </ul>
-                <form id="search" action="/ticket-tool/search" method="post">
-                    <input class="searchbox" type="number" name="ticketnum" placeholder="Enter Ticket to search">
+                <form id="month" action="/ticket-tool/export" method="post">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                        <li class="nav-item">
+                            <select class="btn-sm" id="month" name="MONTH">
+                                <% MONTH.forEach((MONTH)=>{%>
+                                    <option value=<%= MONTH.MON%>>
+                                        <%= MONTH.MON %></option>
+                                    <%})%>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-nav btn-sm">EXPORT</button>
+                        </li>
+                    </ul>
                 </form>
-                <a class="nav-link" href="/ticket-tool/config"><span class="gear">&#9881;</span></a>
+                &emsp;
+                <form id="viewmonth" action="/ticket-tool/viewdata" method="post">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                        <li class="nav-item">
+                            <select class="btn-sm" id="viewmonth" name="viewMONTH">
+                                <% MONTH.forEach((MONTH)=>{%>
+                                    <option value=<%= MONTH.MON%>>
+                                        <%= MONTH.MON %></option>
+                                    <%})%>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-nav btn-sm">VIEW DATA</button>
+                        </li>
+                    </ul>
+                </form>
+                &emsp;
+                <form id="search" action="/ticket-tool/search" method="post">
+                    <input class="searchbox-col" type="number" name="ticketnum" placeholder="Enter Ticket to search">
+                </form>
+                <a class="nav-link" href="/ticket-tool/config"><span class="gear">&#9776;</span></a>
             </div>
         </div>
     </nav>

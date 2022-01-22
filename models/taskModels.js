@@ -16,6 +16,20 @@ const insertTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREA
     });
 };
 
+const updateTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, callback) => {
+
+    const sql = "UPDATE tickets SET RESOLUTION = ?, TICKET_TYPE = ?, COMMENT = ? WHERE TICKET = ?";
+
+    database.appDatabase.run(sql, [RESOLUTION, CATEGORY, DESCRIPTION, TICKET], (err) => {
+        if (err) {
+            callback(err.message);
+        }
+
+        const successMsg = "Ticket updated...";
+        callback(successMsg);
+    });
+};
+
 const ticketCategory = (callback) => {
     var cat = [];
     const file = path.resolve(__dirname, '../category', 'ticketCategory.csv');
@@ -27,7 +41,7 @@ const ticketCategory = (callback) => {
 };
 
 const exportAllCSV = (callback) => {
-    const sql = "SELECT * FROM tickets ORDER BY TICKET DESC";
+    const sql = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets ORDER BY TICKET DESC";
 
     database.appDatabase.all(sql, [], (err, rows) => {
         if (err) {
@@ -38,8 +52,20 @@ const exportAllCSV = (callback) => {
     });
 };
 
-const exportPrevious = (mon, callback) => {
-    const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+const getMonths = (callback) => {
+
+    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET DESC LIMIT 12";
+
+    database.appDatabase.all(sql, [], (err, row) => {
+        if (err) {
+            callback(err.message);
+        }
+        callback(row);
+    });
+};
+
+const exportMonth = (mon, callback) => {
+    const sql = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
 
     database.appDatabase.all(sql, [mon], (err, rows) => {
         if (err) {
@@ -93,7 +119,9 @@ module.exports = {
     exportAllCSV,
     searchTicket,
     getCount,
-    exportPrevious,
-    getData
+    exportMonth,
+    getData,
+    updateTicket,
+    getMonths
 };
 

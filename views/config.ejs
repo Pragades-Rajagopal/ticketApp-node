@@ -3,6 +3,9 @@
 <div class="container">
     <form action="/ticket-tool/config" method="post">
         <div class="mb-3">
+            <% if (errors.DESCR) { %>
+                <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
+            <% } %>
             <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the new resolution *" name="DESCR">
         </div>
         <button type="submit" class="btn btn-primary">SUBMIT</button>

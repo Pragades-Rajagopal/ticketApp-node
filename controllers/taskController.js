@@ -6,8 +6,8 @@ const fs = require('fs');
 const fastcsv = require('fast-csv');
 
 
-let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
-let curMON = moment.utc().format('MMMYYYY');
+// let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
+// let curMON = moment.utc().format('MMMYYYY');
 
 let app_nm = [{'name':'REPC'}, {'name':'TIGER'}, {'name':'RERT'}, {'name':'MSPS'}, {'name':'REACT'}];
 let users = [{'user':'Bharat'}, {'user':'Harish'}, {'user':'Pragadeswar'}, {'user':'Saibhargavi'}, {'user':'Sucharitha'}, {'user':'Surandranath'}];
@@ -20,9 +20,14 @@ const getTicketCount = () => {
 };
 
 function index_page_get (req, res) {
-
+    
     taskModel.ticketCategory((resolution) => {
-        res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON.toUpperCase(), curMON: curMON.toUpperCase(), errors:{}});
+
+        taskModel.getMonths((month) => {
+
+            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, errors:{}, MONTH: month});
+        });
+        
     });
     
 };
@@ -33,7 +38,10 @@ function index_page_post (req, res) {
     if (!errors.isEmpty()) {
         
         taskModel.ticketCategory((resolution) => {
-            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, prevMON:prevMON.toUpperCase(), curMON: curMON.toUpperCase(), errors:errors.mapped()});
+
+            taskModel.getMonths((month) => {
+                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:errors.mapped()});
+            });
             
         });
         return;
@@ -51,7 +59,7 @@ function index_page_post (req, res) {
     taskModel.searchTicket(TICKET, (result) => {
         // console.log(result);
         if (result) {
-            res.send ("<title>Zoinks!</title><h2 class='subHeading'>Ticket <u>"+ TICKET +"</u> was already catogorized under '<u><i>"+ result.RESOLUTION +"</i></u>' resolution by "+ result.RESOLVED_BY +"!!</h2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
+            res.send ("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><h2 class='subHeading'>Ticket <u>"+ TICKET +"</u> was already categorized under '<u><i>"+ result.RESOLUTION +"</i></u>' by "+ result.RESOLVED_BY +"!!</h2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
             // const err = new Error('Ticket already exist!');
             // err.statusCode = 404;
             // res.status(404).send({error: err.message});
@@ -72,19 +80,67 @@ function search_ticket (req, res) {
     taskModel.searchTicket(ticket, (result) => {
         // console.log(result);
         if (!result) {
-            res.send ("<title>Zoinks!</title><H2 class='subHeading'>Ticket "+ ticket +" does not exist!!</H2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
+            res.send ("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><H2 class='subHeading'>Ticket "+ ticket +" does not exist!!</H2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
             return;
         }
+        let test = [{'MON':''}];
+        taskModel.ticketCategory((resolution) => {
+            // taskModel.exportMonth((month) => {
+            res.render('search', {resolution: resolution, result: result, MONTH: test, errors: {}});
+            // });
+        });
         
-        res.render('search', {result: result, curMON: curMON.toUpperCase(), prevMON:prevMON.toUpperCase()});
+    });
+
+};
+
+function search_page_update (req, res) {
+
+    const TICKET = req.body.Ticket;
+
+    errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        
+        taskModel.searchTicket(TICKET, (value) => {
+            taskModel.ticketCategory((resolution) => {
+                taskModel.getMonths((month) => {
+                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors: errors.mapped()});
+                });
+            });
+        });
+        return;
+    }
+
+    const DESCR = req.body.DESCR;
+    const CATEGORY = req.body.CATEGORY;
+    const COMMENT = req.body.COMMENT;
+    
+    taskModel.updateTicket(TICKET, DESCR, CATEGORY, COMMENT, (result) => {
+        // console.log(result);
+
+        taskModel.searchTicket(TICKET, (value) => {
+            taskModel.ticketCategory((resolution) => {
+                
+                taskModel.getMonths((month) => {
+                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors:{}});
+                });
+            });
+        });
+        
     });
 
 };
 
 function getTicketData (req, res) {
 
-    taskModel.getData(curMON, (result) => {
-        res.render('viewdata', {result: result, prevMON: prevMON.toUpperCase(), curMON: curMON.toUpperCase()});
+    const MON = req.body.viewMONTH;
+
+    taskModel.getData(MON, (result) => {
+        
+        taskModel.getMonths((month) => {
+            res.render('viewdata', {result: result, MONTH: month, MON: MON});
+        });
     });
 };
 
@@ -102,28 +158,30 @@ function exportAllCSV (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
+            res.send("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export</title><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
         })
         .pipe(ws);
 
     });
 };
 
-function exportPrevMon (req, res) {
+function exportSelectedMonth (req, res) {
+
+    const MON = req.body.MONTH;
     
-    taskModel.exportPrevious(prevMON, (result) => {
+    taskModel.exportMonth(MON, (result) => {
         // console.log(result);
 
         const filePath = path.resolve(__dirname, '../', 'public', 'exports');
         let time = moment.utc().format('YYYYMMDDhhmmss');
-        const filename = 'ticket_'+ prevMON +'_' + time + '.csv';
+        const filename = 'ticket_'+ MON +'_' + time + '.csv';
         const endPath = filePath + '\\' + filename;
         // console.log(endPath);
 
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
+            res.send("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export</title><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
         })
         .pipe(ws);
     });
@@ -131,10 +189,20 @@ function exportPrevMon (req, res) {
 
 function newResolution_get (req, res) {
 
-    res.render('config', {curMON: curMON.toUpperCase(), prevMON: prevMON.toUpperCase(), errors:{}});
+    taskModel.getMonths((month) => {
+        res.render('config', {MONTH: month, errors:{}});
+    });
 };
 
 function newResolution_put (req, res) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        taskModel.getMonths((month) => {
+            res.render('config', {MONTH: month, errors: errors.mapped()});
+        });        
+        return;
+    };
 
     const resolution = req.body.DESCR;
     const filePath = path.resolve(__dirname, '../', 'category', 'ticketCategory.csv');
@@ -149,11 +217,17 @@ function newResolution_put (req, res) {
         includeEndRowDelimiter: true })
         .pipe(ws);
     
-    res.render('config', {curMON: curMON.toUpperCase(), prevMON: prevMON.toUpperCase(), errors:{}});    
+    taskModel.getMonths((month) => {
+        res.render('config', {MONTH: month, errors:{}});
+    });    
 }
 
 function insight_page (req, res) {
     res.render('insights');
+};
+
+function changelog_page (req, res) {
+    res.render('changelogs');
 };
 
 
@@ -162,10 +236,12 @@ module.exports = {
     index_page_post,
     exportAllCSV,
     search_ticket,
-    exportPrevMon,
+    exportSelectedMonth,
     getTicketData,
     newResolution_get,
     newResolution_put,
-    insight_page
+    insight_page,
+    search_page_update,
+    changelog_page
 };
 

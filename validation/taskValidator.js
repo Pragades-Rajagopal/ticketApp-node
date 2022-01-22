@@ -26,4 +26,8 @@ exports.validateTask = [
     .withMessage("Ticket category is mandatory")
 ];
 
-
+exports.configValidation = [
+    check('DESCR')
+    .isLength({min:1})
+    .withMessage("New resolution is mandatory")
+];

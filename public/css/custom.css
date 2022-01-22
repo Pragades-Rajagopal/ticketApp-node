@@ -1,9 +1,9 @@
 .heading {
-    background-color: rgb(152, 178, 225);
-    color: black;
+    /* background-color: rgba(160, 245, 132, 0.289); */
+    color: slateblue;
     text-align: center;
     text-decoration: solid;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }
 
 .subHeading {
@@ -15,14 +15,9 @@
     background-color: slateblue;
 }
 
-/* .nav-val {
-    color: black !important;
-    ;
-} */
-
 .cpny-lg {
     background-color: slateblue;
-    border-radius: 10px;
+    color: wheat;
 }
 
 html {
@@ -33,12 +28,25 @@ html {
     border-radius: 10px;
 }
 
-.searchbox {
-    border-radius: 3px;
-}
 
 .gear {
     text-align: center;
     size: 10px !important;
+    color: antiquewhite;
 
+}
+
+.table-no-border {
+    border-color: white;
+    margin-bottom: 0rem;
+}
+
+.btn-nav {
+    background-color: #968bdf;
+    color: antiquewhite;
+    border-width: 1px;
+}
+
+.footwrapper {
+    margin-top: 10px;
 }
