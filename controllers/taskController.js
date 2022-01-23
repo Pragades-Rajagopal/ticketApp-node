@@ -59,7 +59,7 @@ function index_page_post (req, res) {
     taskModel.searchTicket(TICKET, (result) => {
         // console.log(result);
         if (result) {
-            res.send ("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><h2 class='subHeading'>Ticket <u>"+ TICKET +"</u> was already categorized under '<u><i>"+ result.RESOLUTION +"</i></u>' by "+ result.RESOLVED_BY +"!!</h2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
+            res.send ("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><nav class=\"navbar\"></nav><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><h3 class='subHeading'>TICKET <u>"+ TICKET +"</u> WAS ALREADY CATEGORIZED UNDER \"<u><i>"+ result.RESOLUTION.toUpperCase() +"</i></u>\" BY "+ result.RESOLVED_BY.toUpperCase() +"!</h3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
             // const err = new Error('Ticket already exist!');
             // err.statusCode = 404;
             // res.status(404).send({error: err.message});
@@ -80,14 +80,14 @@ function search_ticket (req, res) {
     taskModel.searchTicket(ticket, (result) => {
         // console.log(result);
         if (!result) {
-            res.send ("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><H2 class='subHeading'>Ticket "+ ticket +" does not exist!!</H2><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a>");
+            res.send ("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><nav class=\"navbar\"></nav><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3 class='subHeading'>TICKET \""+ ticket +"\" DOES NOT EXIST!</H3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
             return;
         }
         let test = [{'MON':''}];
         taskModel.ticketCategory((resolution) => {
-            // taskModel.exportMonth((month) => {
-            res.render('search', {resolution: resolution, result: result, MONTH: test, errors: {}});
-            // });
+            taskModel.getMonths((month) => {
+                res.render('search', {resolution: resolution, result: result, MONTH: month, errors: {}});
+            });
         });
         
     });
@@ -158,7 +158,7 @@ function exportAllCSV (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export</title><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3>REPORT DOWNLOADED</H3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -181,7 +181,7 @@ function exportSelectedMonth (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export</title><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><h3>Report downloaded</h3><a class='btn btn-outline-dark cancel' href='/ticket-tool'>Go home</a>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3>REPORT DOWNLOADED</H3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
     });

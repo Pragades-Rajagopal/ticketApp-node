@@ -7,8 +7,9 @@
 }
 
 .subHeading {
-    text-align: center;
+    text-align: left;
     text-decoration: wavy;
+    color: orange;
 }
 
 .bg-exp {
