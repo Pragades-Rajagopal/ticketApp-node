@@ -4,6 +4,13 @@
 <div class="container">
     <div class="table-responsive-sm">
         <h3 class="heading">TICKET DETAILS FOR <%= MON %> (<%= result.length %>)</h3>
+        <table>
+            <tr>
+                <td class="count"><label>Incident : <%= i_count.length %></label></td>
+                <td class="count"><label>Service Request : <%= r_count.length %></label></td>
+            </tr>
+        </table>
+        
         <table class="table table-hover">
             <thead>
                 <tr>

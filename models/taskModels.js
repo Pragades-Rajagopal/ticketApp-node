@@ -100,17 +100,30 @@ const getData = (mon, callback) => {
     });
 };
 
-const getCount = () => {
-    const sql = "SELECT count(*) FROM tickets";
+const incidentCount = (month, callback) => {
+    const sql = "SELECT TICKET FROM tickets where MON = ?  and TICKET_TYPE = 'Incident'";
 
-    database.appDatabase.get(sql, [], (err, results) => {
+    database.appDatabase.all(sql, [month], (err, result) => {
         if (err) {
-            callback(err.message);
+            callback (err.message);
         }
 
-        return results;
+        callback(result)
     });
-};
+}
+
+const requestCount = (month, callback) => {
+    const sql = "SELECT TICKET COUNT_ FROM tickets where MON = ?  and TICKET_TYPE = 'Service Request'";
+
+    database.appDatabase.all(sql, [month], (err, result) => {
+        if (err) {
+            callback (err.message);
+        }
+
+        callback(result)
+    });
+}
+
 
 
 module.exports = {
@@ -118,10 +131,11 @@ module.exports = {
     ticketCategory,
     exportAllCSV,
     searchTicket,
-    getCount,
     exportMonth,
     getData,
     updateTicket,
-    getMonths
+    getMonths,
+    incidentCount,
+    requestCount
 };
 

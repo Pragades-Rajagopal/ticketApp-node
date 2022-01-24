@@ -12,12 +12,6 @@ const fastcsv = require('fast-csv');
 let app_nm = [{'name':'REPC'}, {'name':'TIGER'}, {'name':'RERT'}, {'name':'MSPS'}, {'name':'REACT'}];
 let users = [{'user':'Bharat'}, {'user':'Harish'}, {'user':'Pragadeswar'}, {'user':'Saibhargavi'}, {'user':'Sucharitha'}, {'user':'Surandranath'}];
 
-// non functional now
-const getTicketCount = () => {
-    taskModel.getCount(curMON, (result) => {
-        return result;
-    });
-};
 
 function index_page_get (req, res) {
     
@@ -139,7 +133,11 @@ function getTicketData (req, res) {
     taskModel.getData(MON, (result) => {
         
         taskModel.getMonths((month) => {
-            res.render('viewdata', {result: result, MONTH: month, MON: MON});
+            taskModel.incidentCount(MON, (i_count) => {
+                taskModel.requestCount(MON, (r_count) => {
+                    res.render('viewdata', {result: result, MONTH: month, MON: MON, i_count: i_count, r_count: r_count});
+                });
+            });
         });
     });
 };
