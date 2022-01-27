@@ -61,3 +61,7 @@ html {
     font-size: 15px;
     font-weight: 600;
 }
+
+.dataTables_filter {
+    margin-bottom: 10px;
+}

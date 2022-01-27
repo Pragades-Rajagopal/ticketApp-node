@@ -9,6 +9,7 @@ router.get('/ticket-tool/exportAll', taskController.exportAllCSV);
 router.post('/ticket-tool/search', taskController.search_ticket);
 router.post('/ticket-tool/export', taskController.exportSelectedMonth);
 router.post('/ticket-tool/viewdata', taskController.getTicketData);
+router.get('/ticket-tool/viewAll', taskController.getTicketDataAll);
 router.get('/ticket-tool/config', taskController.newResolution_get);
 router.post('/ticket-tool/config', taskValidator.configValidation, taskController.newResolution_put);
 router.get('/ticket-tool/v1/insights', taskController.insight_page);

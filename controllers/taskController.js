@@ -142,6 +142,15 @@ function getTicketData (req, res) {
     });
 };
 
+function getTicketDataAll (req, res) {
+
+    taskModel.getAllData((result) => {
+        taskModel.getMonths((month) => {
+            res.render('viewdata', {result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {}});
+        });
+    })
+};
+
 function exportAllCSV (req, res) {
     
     taskModel.exportAllCSV((result) => {
@@ -240,6 +249,7 @@ module.exports = {
     newResolution_put,
     insight_page,
     search_page_update,
-    changelog_page
+    changelog_page,
+    getTicketDataAll
 };
 

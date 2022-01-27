@@ -21,7 +21,7 @@
     <p>Application is hosted in <b><i>CAMTTVDWS001</i></b> server by running it as a service "<b><i>tt_tool</i></b>". Port in&out 9191 is opened to serve to the end user. <br>Link: <a href="/ticket-tool">Ticket tool</a></p>
     <h3>Debugging steps</h3>
     <p>
-        <li><b>Application is not reachable (with VPN connected)</b>, open the development server and try accessing the application as localhost <a href="http://localhost:8000/ticket-tool">http://localhost:8000/ticket-tool</a></li>
+        <li><b>Application is not reachable (with VPN connected)</b>, open the development server and try accessing the application as localhost <a href="http://localhost:9191/ticket-tool">http://localhost:9191/ticket-tool</a></li>
         <ul>
             <li>If the application is reachable in localhost, check if the port <i>dev:serve:9191</i> is working in inbound and outbound rules.</li>
             <li>If not working in localhost, check for the service <i>tt_tool</i> and it should be running. (<b>after every patching activity in the dev server, service needs to be started manually!</b>)</li>

@@ -8,6 +8,9 @@
     <title>Ticket tool</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom.css">
+    <link rel="stylesheet" href="/public/css/table.css">
+    <script type="text/javascript" charset="utf8" src="/public/scripts/jquery.js"></script>
+    <script type="text/javascript" charset="utf8" src="/public/scripts/datatable.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-exp">
@@ -37,7 +40,11 @@
                         </li>
                     </ul>
                 </form>
-                &emsp;
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ticket-tool/viewAll">VIEW ALL</a>
+                    </li>
+                </ul>                 
                 <form id="viewmonth" action="/ticket-tool/viewdata" method="post">
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                         <li class="nav-item">

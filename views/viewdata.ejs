@@ -1,6 +1,14 @@
 <%- include('header') %>
 <br>
-
+<script>
+    $(document).ready( function () {
+        $('#myTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true
+        });
+    } );
+</script>
 <div class="container">
     <div class="table-responsive-sm">
         <h3 class="heading">TICKET DETAILS FOR <%= MON %> (<%= result.length %>)</h3>
@@ -10,15 +18,16 @@
                 <td class="count"><label>Service Request : <%= r_count.length %></label></td>
             </tr>
         </table>
-        
-        <table class="table table-hover">
+        <br>
+        <table id="myTable" class="table table-hover">
             <thead>
-                <tr>
+                <tr style="background-color: #968bdf;">
                     <th>Ticket No</th>
                     <th>Resolution</th>
                     <th>Ticket Category</th>
                     <th>Application</th>
                     <th>Resolved by</th>
+                    <th>Month</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,10 +38,12 @@
                         <td><%= val.TICKET_TYPE %></td>
                         <td><%= val.APP_NM %></td>
                         <td><%= val.RESOLVED_BY %></td>
+                        <td><%= val.MON %></td>
                     </tr>
                 <% } %>
             </tbody>
         </table>
+        <br>
         <a class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
     </div>
 </div>
