@@ -23,7 +23,7 @@
 }
 
 html {
-    zoom: 95%;
+    zoom: 100%;
 }
 
 .mb-3 {
@@ -44,13 +44,28 @@ html {
 }
 
 .btn-nav {
-    background-color: #968bdf;
+    /* background-color: #968bdf; */
+    background-color: none;
     color: antiquewhite;
-    border-width: 1px;
+    /* border-width: 1px; */
+    font-size: 12px;
+}
+
+.nav-val, .nav-link {
+    color: antiquewhite !important;
+}
+.navbar-nav {
+    align-items: center;
+}
+
+.wrap-ctn {
+    background-color: rgb(123, 104, 243);
 }
 
 .footwrapper {
     margin-top: 10px;
+    padding-right: 88px;
+    padding-left: 88px;
 }
 
 .count {
@@ -64,4 +79,22 @@ html {
 
 .dataTables_filter {
     margin-bottom: 10px;
+}
+
+.para-hl, .para-hl-link {
+    background-color: lightgreen;
+    padding-left: 10px;
+    color: #000;
+}
+
+.para-hl-link {
+    text-decoration: none;
+    color: orangered;
+    font-style: italic;
+}
+
+.app-logo {
+    align-content: center;
+    padding-top: 1px;
+    padding-right: 2px;
 }

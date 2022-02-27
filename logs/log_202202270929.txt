@@ -1,0 +1,13 @@
+[2022/02/27 09:29:21]: Application is running in port: 9191
+[2022/02/27 09:29:21]: Application connected to database in path: C:\Node exp\TicketApp\database\data.sqlite3
+[2022/02/27 09:31:05]: Viewed ticket details for month: Feb2022
+[2022/02/27 09:31:10]: Viewed ticket details for month: Dec2021
+[2022/02/27 09:31:12]: Viewed ticket details for all months
+[2022/02/27 09:31:18]: Ticket "10033600" was searched in the application
+[2022/02/27 09:31:32]: Ticket "10033600" was updated with data: ["REPC - Functional Issue", "Incident","Tagging issue - Resolved"]
+[2022/02/27 09:31:45]: Viewed ticket details for month: Feb2022
+[2022/02/27 09:32:04]: Viewed ticket details for month: Feb2022
+[2022/02/27 09:32:36]: Ticket "10034065" logged in the application with data: ["Order closure - XML Failure", "Incident", "XML failure"]
+[2022/02/27 09:32:50]: Exported data for all months
+[2022/02/27 09:33:36]: Exported data for month: Dec2021
+[2022/02/27 09:34:55]: New resolution was configured ["MSPS - Mail engine restart"]

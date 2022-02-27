@@ -1,8 +1,15 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const taskRoutes = require('./routes/taskRoutes')
+const taskRoutes = require('./routes/taskRoutes');
+const moment = require('moment');
+require('./utils/writetoLogs');
+const logfilePath = require('./utils/createLogfile');
 
+const logfileName = logfilePath.filePath;
+console.file(logfileName);
+
+const port = 9191;
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -19,7 +26,9 @@ app.get('/check', (req, res) => {
 
 app.use(taskRoutes);
 
-app.listen(8000, () => {
-    // console.log('server running in port:8000');
+let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+
+app.listen(port, () => {
+    console.log(`[${timestamp}]: Application is running in port: ${port}`);
 });
 

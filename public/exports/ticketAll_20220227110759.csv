@@ -1,0 +1,52 @@
+Ticket_ID,Application,IM/SRQ,Category,RCA/Remarks,CREATED_ON,MON,RESOLVED_BY
+10034077,REPC,Incident,Charge Transfer - SECS Change order,Issue due to the job,2022/02/27 11:07:37,Feb2022,Pragadeswar
+10034075,REPC,Service Request,Supplier/Customer Migration/Numbering Plan Change Request,NA,2022/02/27 10:29:03,Feb2022,Pragadeswar
+10034073,REPC,Service Request,Supplier/Customer Migration/Numbering Plan Change Request,"Sales & Product team request to migrate to ""23112"", Google customer",2022/02/27 10:22:51,Feb2022,Surandranath
+10034070,REPC,Service Request,Backend Update - LM Speed,NA,2022/02/27 10:11:06,Feb2022,Pragadeswar
+10034069,TIGER,Incident,Order closure - XML Failure,VA,2022/02/27 10:09:16,Feb2022,Saibhargavi
+10034068,REPC,Service Request,Backend Update - Toll-Free number removal/Order Elimination for Optimus Orders,Optimus team is working on the implementation,2022/02/27 09:44:58,Feb2022,Sucharitha
+10034065,REPC,Incident,Order closure - XML Failure,XML failure-Analysis in progress,2022/02/27 09:32:36,Feb2022,Saibhargavi
+10034062,REPC,Incident,Application Latency - Multi user sessions,User session killed,2022/02/26 07:25:29,Feb2022,Pragadeswar
+10034060,REPC,Service Request,User Request - Script/Data Extract,NA,2022/02/26 06:26:58,Feb2022,Pragadeswar
+10034055,REPC,Incident,Application Latency - Multi user sessions,User created contention,2022/02/22 05:40:14,Feb2022,Bharat
+10034045,REPC,Service Request,Backend Update - PM Basket Approval,NA,2022/02/15 03:35:34,Feb2022,Sucharitha
+10034041,REPC,Incident,Charge Transfer - Retrigger charges,NA,2022/02/15 03:33:10,Feb2022,Bharat
+10034040,REPC,Incident,Charge Transfer - Retrigger charges,Job was disabled for this issue,2022/02/14 03:32:44,Feb2022,Pragadeswar
+10034029,REPC,Service Request,Termination Date Update for Data Orders,NA,2022/01/26 12:39:10,Jan2022,Pragadeswar
+10034025,REPC,Service Request,Backend Update - Charge for Tiger Voice Orders,NA,2022/01/26 12:32:10,Jan2022,Surandranath
+10034021,REPC,Service Request,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,NA,2022/01/26 12:16:53,Jan2022,Saibhargavi
+10034020,REPC,Incident,Charge Transfer - SECS Change order,NA,2022/01/23 02:43:36,Jan2022,Bharat
+10034015,REPC,Incident,Charge Transfer - SECS Change order,NA,2022/01/23 02:22:55,Jan2022,Sucharitha
+10034010,REPC,Incident,Application Latency - Multi user sessions,NA,2022/01/23 02:14:09,Jan2022,Bharat
+10034001,REPC,Incident,Charge Transfer - SECS Change order,NA,2022/01/23 02:11:29,Jan2022,Pragadeswar
+10034000,REPC,Incident,Charge Transfer - SECS Change order,Dev team is debugging the issue,2022/01/20 07:16:30,Jan2022,Pragadeswar
+10033996,REPC,Service Request,Bill Start Date Update for Data Orders,Description updated,2022/01/15 05:23:43,Jan2022,Saibhargavi
+10033995,REPC,Incident,Application Latency - Multi user sessions,Testing,2022/01/15 03:14:13,Jan2022,Saibhargavi
+10033992,REPC,Incident,Old charge Id update in the latest MACD order,Yet to be deployed,2022/01/15 04:00:59,Jan2022,Saibhargavi
+10033991,REPC,Incident,Charge Transfer - SECS Change order,NA,2022/01/15 03:14:13,Jan2022,Pragadeswar
+10033990,REPC,Service Request,Termination Date Update for Data Orders,NA,2022/01/15 02:50:58,Jan2022,Bharat
+10033988,RERT,Service Request,Pilot activity - City Configuration,NA,2022/01/14 02:45:53,Jan2022,Saibhargavi
+10033987,REPC,Service Request,Backend Update - Toll-Free number removal/Order Elimination for Optimus Orders,NA,2022/01/14 02:36:12,Jan2022,Surandranath
+10033980,REPC,Incident,Application Latency - Multi user sessions,NA,2022/01/14 01:04:02,Jan2022,Surandranath
+10033973,REACT,Incident,Charge Transfer - SECS Change order,NA,2022/01/14 12:39:22,Jan2022,Pragadeswar
+10033970,REPC,Incident,Circuit Fetching - PO details Updated for Cramer fetched circuit,NA,2022/01/14 12:31:27,Jan2022,Bharat
+10033964,REPC,Service Request,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,Request from user,2022/01/13 12:27:51,Jan2022,Bharat
+10033963,REPC,Incident,Charge Transfer - SECS Change order,NA,2022/01/14 10:18:54,Jan2022,Pragadeswar
+10033962,REPC,Service Request,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,NA,2022/01/13 06:56:13,Jan2022,Sucharitha
+10033961,REPC,Service Request,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,Requirement is in place (Optimus team),2022/01/13 06:35:45,Jan2022,Surandranath
+10033960,MSPS,Service Request,Backend Update - Toll-Free number removal/Order Elimination for Optimus Orders,NA,2022/01/13 03:25:43,Jan2022,Pragadeswar
+10033949,TIGER,Incident,Backend Update - Charge for Tiger Voice Orders,NA,2022/01/13 01:35:31,Jan2022,Pragadeswar
+10033941,REPC,Service Request,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,NA,2022/01/13 07:30:56,Jan2022,Bharat
+10033940,MSPS,Service Request,Backend Update - MSPS application server,NA,2022/01/12 07:28:18,Jan2022,Harish
+10033932,TIGER,Incident,Supplier/Customer Migration/Numbering Plan Change Request,NA,2022/01/12 06:31:16,Jan2022,Surandranath
+10033931,REPC,Service Request,Backend Update - Charge for Tiger Voice Orders,NA,2022/01/12 06:08:26,Jan2022,Pragadeswar
+10033930,REPC,Incident,Order closure - XML Failure,NA,2022/01/11 04:14:13,Jan2022,Bharat
+10033927,REPC,Incident,Backend Update - Service Precedence and Service Abbreviation,NA,2022/01/11 07:18:45,Jan2022,Bharat
+10033926,TIGER,Incident,Application Latency - Multi user sessions,NA,2022/01/11 07:21:52,Jan2022,Saibhargavi
+10033922,RERT,Service Request,Pilot activity-Owner/Service Configuration,NA,2022/01/11 07:23:27,Jan2022,Sucharitha
+10033921,MSPS,Service Request,Backend Update - Charge for Tiger Voice Orders,NA,2022/01/12 06:32:48,Jan2022,Pragadeswar
+10033910,REPC,Incident,Application Latency - Multi user sessions,NA,2021/12/12 06:32:48,Dec2021,Pragadeswar
+10033909,REPC,Service Request,Backed Update - Incoming Digit/Foreign Incoming Digit/Routing No for Optimus Orders,NA,2021/12/12 06:32:48,Dec2021,Surandranath
+10033900,TIGER,Incident,Order closure - XML Failure,NA,2021/12/12 06:32:48,Dec2021,Bharat
+10033800,REPC,Incident,Charge Transfer - SECS Change order,Dev team is working on the issue,2021/11/12 06:32:48,Nov2021,Sucharitha
+10033600,TIGER,Incident,REPC - Functional Issue,Tagging issue - Resolved,2021/11/12 06:32:48,Nov2021,Bharat

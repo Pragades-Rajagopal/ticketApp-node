@@ -12,9 +12,9 @@ router.post('/ticket-tool/viewdata', taskController.getTicketData);
 router.get('/ticket-tool/viewAll', taskController.getTicketDataAll);
 router.get('/ticket-tool/config', taskController.newResolution_get);
 router.post('/ticket-tool/config', taskValidator.configValidation, taskController.newResolution_put);
-router.get('/ticket-tool/v1/insights', taskController.insight_page);
+router.get('/ticket-tool/v/insights', taskController.insight_page);
 router.post('/ticket-tool/search/update', taskValidator.validateTask, taskController.search_page_update);
-router.get('/ticket-tool/v1/changelogs', taskController.changelog_page);
+router.get('/ticket-tool/v/changelogs', taskController.changelog_page);
 
 module.exports = router;
 

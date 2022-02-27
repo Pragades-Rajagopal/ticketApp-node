@@ -2,6 +2,7 @@
     <link rel="icon" type="image/png"  href="/public/favicon/ticket64.png">
     <title>Ticket Tool-Insights</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
+    <link rel="stylesheet" href="/public/css/custom.css">
 </head>
 
 <div class="container">
@@ -10,8 +11,8 @@
     <a class="navbar-brand" href="/ticket-tool">Home</a>
     <br>
     <h3>Insights</h3>
-    <p>Ticket tool is designed using Node.js and SQLite database. This application is designed based on MVC architectural pattern (Model, View and Controller components).</p>
-    <p>Controller is the bridge between Model and View componets.</p>
+    <p>Ticket tool is designed using Node.js, Express and SQLite database. This application is designed based on MVC architectural pattern (Model, View and Controller components).</p>
+    <p>Controller is the bridge between Model and View components.</p>
     <p>
         <li><b>Model</b> : This component handles data logic. In our case all the database connections and operations are handled.</li>
         <li><b>View</b> : This component displays the information from the model to the user.</li>
@@ -19,19 +20,20 @@
         <li><b>Router</b> : This component routes to different pages based on user operations.</li>
     </p>
     <p>Application is hosted in <b><i>CAMTTVDWS001</i></b> server by running it as a service "<b><i>tt_tool</i></b>". Port in&out 9191 is opened to serve to the end user. <br>Link: <a href="/ticket-tool">Ticket tool</a></p>
-    <h3>Debugging steps</h3>
+    <br>
+    <h4>Debugging steps</h4>
     <p>
         <li><b>Application is not reachable (with VPN connected)</b>, open the development server and try accessing the application as localhost <a href="http://localhost:9191/ticket-tool">http://localhost:9191/ticket-tool</a></li>
         <ul>
             <li>If the application is reachable in localhost, check if the port <i>dev:serve:9191</i> is working in inbound and outbound rules.</li>
             <li>If not working in localhost, check for the service <i>tt_tool</i> and it should be running. (<b>after every patching activity in the dev server, service needs to be started manually!</b>)</li>
         </ul>
-        <li><b>CSV download operations is not working</b>, check in <i>/public/exports</i> path (for EXPORT ALL) if a new file is created in this path after clicking on EXPORT links.</li>
+        <li><b>CSV download operations is not working</b>, check in <i>./public/exports</i> directory (for EXPORT ALL) if a new file is created in this directory after clicking on EXPORT links.</li>
         <ul>
             <li>Need to debug <i><u>exportAllCSV()</u> function</i> for EXPORT ALL and <i><u>exportPrevMon()</u> function</i> for EXPORT FOR X month</li>
             <li>Check if the data is fetched from the respective function in Model / proper arguments are passed in the above functions</li>
         </ul>
-        <li><b>Resolution is not added from the CONFIG page</b>, check in <i>/category</i> path if the new resolution is appended in the ticketCategory.csv file. <br>&emsp;&emsp; Debug <i><u>newResolution_put()</u> function</i> for write operation</li>
+        <li><b>Resolution is not added from the CONFIG page</b>, check in <i>./category</i> directory if the new resolution is appended in the ticketCategory.csv file. <br>&emsp;&emsp; Debug <i><u>newResolution_put()</u> function</i> for write operation</li>
         <br>
         <li><b>Database operation issue</b>, check for the respective function in Model</li>
         <ul>
@@ -41,14 +43,16 @@
             <li><b>Restart the service finally!</b></li>
         </ul>
     </p>
-    <h3>Housekeeping activities</h3>
+    <br>
+    <h4>Housekeeping activities</h4>
     <p>
-        <li>CSV exports will create files in <i>/public/exports</i> and accumulate over time. All the files can be deleted periodically (expected less than 100MB/year)</li>
+        <li>CSV exports will create files in <i>./public/exports</i> directory and accumulate over time. All the files can be deleted periodically (expected less than 100MB/year)</li>
+        <li>Log files will be generated in <i>./logs</i> directory and can be deleted periodically</li>
     </p>
     <br><br>
     <footer>
-        <p>v1.1 New features & Bug fixes <a href="/ticket-tool/v1/changelogs">View Changelogs</a></p>
-        <p>&copy; 2022 - For internal use only!</p>
+        <p class="para-hl">v1.2 Added logs and minor code changes <a class="para-hl-link" href="/ticket-tool/v/changelogs">View Changelogs</a></p>
+        <p>&copy; MMXXII - For internal use only!</p>
     </footer>
 </div>
 
