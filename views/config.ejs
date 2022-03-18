@@ -7,11 +7,63 @@
             <% if (errors.DESCR) { %>
                 <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
             <% } %>
-            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the new resolution *" name="DESCR">
+            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the new resolution *" name="DESCR" list="resol" onchange="getComment()">
+            <datalist id="resol">
+                <% resolution.forEach((resolution, index)=>{%>
+                    <option id=<%= resolution.CATEGORY%>> 
+                        <%= resolution.CATEGORY %></option> <input id="<%= resolution.CATEGORY%>" value="<%= resolution.COMMENT %>" name="<%= resolution.TYPE %>">
+                    <%})%>
+            </datalist>
+            <label for="inputComment" style="color: red;">If not mentioned, by default "NA" will be updated!</label>
+            <textarea autofocus type="text" class="form-control shadow-none mb-3" id="inputComment" placeholder="Enter the comment" name="COMMENT"></textarea>
+            <% if (errors.CATEGORY) { %>
+                <div class="text-danger mb-3"><%= errors.CATEGORY.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputCategory" placeholder="Enter the ticket category *" name="CATEGORY" list="category">
+            <datalist id="category">
+                <option value="Incident">
+                <option value="Service Request">
+            </datalist>
         </div>
         <button type="submit" class="btn btn-primary">SUBMIT</button>
-        <a class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
-    </form> 
+        <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+    </form>    
 </div>
+<br>
+<div class="container keybind">
+    <label>KEYBINDINGS</label>
+    <table class="kb-table">
+        <tr>
+            <th style="width:65%">Action</th>
+            <th>Keys</th>
+        </tr>
+        <tr>
+            <td>Home</td>
+            <td>Alt + 0</td>
+        </tr>
+        <tr>
+            <td>Export All</td>
+            <td>Alt + 1</td>
+        </tr>
+        <tr>
+            <td>Export for Month</td>
+            <td>Alt + 2</td>
+        </tr>
+        <tr>
+            <td>View All</td>
+            <td>Alt + 3</td>
+        </tr>
+        <tr>
+            <td>View For Month</td>
+            <td>Alt + 4</td>
+        </tr>
+        <tr>
+            <td>Config page</td>
+            <td>Alt + 6</td>
+        </tr>
+    </table>
+</div>
+
+<script src="../public/scripts/selector.js"></script>
 
 <%- include('footer') %>

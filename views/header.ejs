@@ -15,7 +15,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-exp">
         <div class="container">
-            <a class="app-logo" href="/ticket-tool">
+            <a accesskey="0" class="app-logo" href="/ticket-tool">
                 <img src="/public/favicon/ticket64.png" width="22" height="20">
             </a>
             <a class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse me-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link nav-val" href="/ticket-tool/exportAll">EXPORT ALL</a>
+                        <a accesskey="1" class="nav-link nav-val" href="/ticket-tool/exportAll">EXPORT ALL</a>
                     </li> 
                 </ul>
                 <form id="month" class="wrap-ctn" action="/ticket-tool/export" method="post">
@@ -39,13 +39,13 @@
                             </select>
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-nav btn-sm">EXPORT</button>
+                            <button accesskey="2" class="btn btn-nav btn-sm">EXPORT</button>
                         </li>
                     </ul>
                 </form>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/ticket-tool/viewAll">VIEW ALL</a>
+                        <a accesskey="3" class="nav-link" href="/ticket-tool/viewAll">VIEW ALL</a>
                     </li>
                 </ul>                 
                 <form id="viewmonth" class="wrap-ctn" action="/ticket-tool/viewdata" method="post">
@@ -59,15 +59,15 @@
                             </select>
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-nav btn-sm">VIEW DATA</button>
+                            <button accesskey="4" class="btn btn-nav btn-sm">VIEW DATA</button>
                         </li>
                     </ul>
                 </form>
                 &emsp;
                 <form id="search" action="/ticket-tool/search" method="post">
-                    <input class="searchbox-col" type="number" name="ticketnum" placeholder="Enter Ticket to search">
+                    <input class="searchbox-col" type="number" name="ticketnum" placeholder="enter ticket to search">
                 </form>
-                <a class="nav-link" href="/ticket-tool/config"><span class="gear">&#9776;</span></a>
+                <a accesskey="6" class="nav-link" href="/ticket-tool/config"><span class="gear">&#9776;</span></a>
             </div>
         </div>
     </nav>

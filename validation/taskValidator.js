@@ -29,5 +29,14 @@ exports.validateTask = [
 exports.configValidation = [
     check('DESCR')
     .isLength({min:1})
-    .withMessage("New resolution is mandatory")
+    .withMessage("New resolution is mandatory"),
+    check('CATEGORY')
+    .isLength({min:1})
+    .withMessage("Ticket category is mandatory")
+];
+
+exports.searchValidation = [
+    check('ticketnum')
+    .isLength({min:1})
+    .withMessage("Search with a ticket number!")
 ];

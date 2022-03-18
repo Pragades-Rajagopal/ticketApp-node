@@ -100,6 +100,18 @@ const getData = (mon, callback) => {
     });
 };
 
+const getDataByCategory = (mon, callback) => {
+    const sql = "SELECT * FROM TICKETS_V2 WHERE MONTH = ? ORDER BY TICKET_COUNT DESC";
+
+    database.appDatabase.all(sql, [mon], (err, rows) => {
+        if (err) {
+            callback(err.message);
+        }
+
+        callback(rows);
+    });
+};
+
 const getAllData = (callback) => {
     const sql = "SELECT * FROM tickets ORDER BY TICKET DESC";
 
@@ -149,6 +161,7 @@ module.exports = {
     getMonths,
     incidentCount,
     requestCount,
-    getAllData
+    getAllData,
+    getDataByCategory
 };
 

@@ -19,7 +19,7 @@
                         <% if (errors.CATEGORY) { %>
                             <div class="text-danger mb-3"><%= errors.CATEGORY.msg %></div>
                         <% } %>
-                        <label for="inputCategory">Ticket Category</label>
+                        <label style="font-style: italic;" for="inputCategory">Ticket Category</label>
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputCategory" name="CATEGORY" value="<%= result.TICKET_TYPE %>" list="category">
                         <datalist id="category">
                             <option value="Incident">
@@ -31,18 +31,18 @@
             <% if (errors.DESCR) { %>
                 <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
             <% } %>
-            <label for="inputDescr">Ticket Description</label>
-            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputDescr" name="DESCR" value="<%= result.RESOLUTION %>" list="resol">
+            <label style="font-style: italic;" for="inputDescr">Ticket Description</label>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputDescr" name="DESCR" value="<%= result.RESOLUTION %>" onchange="updateComment()" list="resol">
             <datalist id="resol">
                 <% resolution.forEach((resolution, index)=>{%>
                     <option id=<%= resolution.CATEGORY%>>
-                        <%= resolution.CATEGORY %></option>
+                        <%= resolution.CATEGORY %></option><input id="<%= resolution.CATEGORY %>" value="<%= resolution.COMMENT %>" name="<%= resolution.TYPE %>">
                     <%})%>
             </datalist>
             <% if (errors.COMMENT) { %>
                 <div class="text-danger mb-3"><%= errors.COMMENT.msg %></div>
             <% } %>
-            <label for="inputComment">Detailed Description</label>
+            <label style="font-style: italic;" for="inputComment">Detailed Description</label>
             <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT"><%= result.COMMENT %></textarea>
             <table class="table table-no-border">
                 <tr>
@@ -62,11 +62,11 @@
             </table>
         </div>
         <button type="submit" class="btn btn-warning">UPDATE</button>
-        <a class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+        <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
     </form>
 </div>
 
-
+<script src="../public/scripts/selector.js"></script>
 
 <%- include('footer') %>
 

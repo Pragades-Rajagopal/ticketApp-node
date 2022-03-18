@@ -7,7 +7,7 @@
 
 <div class="container">
     <br>
-    <a class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
+    <a accesskey="0" class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
     <a class="navbar-brand" href="/ticket-tool">Home</a>
     <br>
     <h3>Insights</h3>
@@ -19,7 +19,7 @@
         <li><b>Controller</b> : This component controls the data flow into a model object and updates the view whenever data changes or routed to another page.</li>
         <li><b>Router</b> : This component routes to different pages based on user operations.</li>
     </p>
-    <p>Application is hosted in <b><i>CAMTTVDWS001</i></b> server by running it as a service "<b><i>tt_tool</i></b>". Port in&out 9191 is opened to serve to the end user. <br>Link: <a href="/ticket-tool">Ticket tool</a></p>
+    <p>Application is hosted in <b><i>Dev application server</i></b> by running it as a service "<b><i>tt_tool</i></b>". Port in&out 9191 is opened to serve to the end user. <br>Link: <a href="/ticket-tool">Ticket tool</a></p>
     <br>
     <h4>Debugging steps</h4>
     <p>
@@ -40,6 +40,7 @@
             <li>Data handshake between the Controller and Model might have corrupted due to some logic issue</li>
             <li>Check if the database connection is established by debugging <i>database/database.js</i> file by enabling logs</li>
             <li>Another issue might be due table lock created by multiple user operations</li>
+            <li><b>Move data.sqlite3 file to other directory and place it back</b> (this will remove session locks created by some main stream operations)</li>
             <li><b>Restart the service finally!</b></li>
         </ul>
     </p>
@@ -51,7 +52,7 @@
     </p>
     <br><br>
     <footer>
-        <p class="para-hl">v1.2 Added logs and minor code changes <a class="para-hl-link" href="/ticket-tool/v/changelogs">View Changelogs</a></p>
+        <p class="para-hl">v1.3 Introduced configuration of resolution and comments & ticket details by category <a class="para-hl-link" href="/ticket-tool/v/changelogs">View Changelogs</a></p>
         <p>&copy; MMXXII - For internal use only!</p>
     </footer>
 </div>

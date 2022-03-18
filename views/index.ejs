@@ -4,13 +4,16 @@
     <h3 class="heading">TICKET TRACKING APPLICATION</h3>
     <form action="/ticket-tool" method="post">
         <div class="mb-3">
+            <% if (errors.ticketnum) { %>
+                <div class="text-danger mb-3 searchError"><%= errors.ticketnum.msg %></div>
+            <% } %>
             <table class="table table-no-border">
                 <tr>
                     <td>
                         <% if (errors.Ticket) { %>
                             <div class="text-danger mb-3"><%= errors.Ticket.msg %></div>
                         <% } %>
-                        <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputTicket" placeholder="Enter the ticket number *" *" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="Ticket">
+                        <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputTicket" placeholder="Enter the ticket number *" *" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" name="Ticket">
                     </td>
                     <td>
                         <% if (errors.CATEGORY) { %>
@@ -27,17 +30,17 @@
                 <% if (errors.DESCR) { %>
                     <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
                 <% } %>
-                <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputDescr" placeholder="Enter the ticket description *" name="DESCR" list="resol">
+                <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputDescr" placeholder="Enter the ticket description *" name="DESCR" list="resol" onchange="updateData()">
                 <datalist id="resol">
                     <% resolution.forEach((resolution, index)=>{%>
-                        <option id=<%= resolution.CATEGORY%>>
-                            <%= resolution.CATEGORY %></option>
+                        <option id=<%= resolution.CATEGORY%>> 
+                            <%= resolution.CATEGORY %></option> <input id="<%= resolution.CATEGORY%>" value="<%= resolution.COMMENT %>" name="<%= resolution.TYPE %>">
                         <%})%>
                 </datalist>
                 <% if (errors.COMMENT) { %>
                     <div class="text-danger mb-3"><%= errors.COMMENT.msg %></div>
                 <% } %>
-                <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT" placeholder="Enter the detailed description *"></textarea>
+                <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT" placeholder="Enter the detailed description *"></textarea>   
             <table class="table table-no-border">
                 <tr>
                     <td>
@@ -70,6 +73,8 @@
         <button type="submit" class="btn btn-primary">SUBMIT</button>
     </form>
 </div>
+
+<script src="../public/scripts/selector.js"></script>
 
 <%- include('footer') %>
 

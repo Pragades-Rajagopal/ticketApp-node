@@ -35,7 +35,8 @@ html {
     text-align: center;
     size: 10px !important;
     color: antiquewhite;
-
+    font-size: 18px;
+    font-style: italic;
 }
 
 .table-no-border {
@@ -48,7 +49,7 @@ html {
     background-color: none;
     color: antiquewhite;
     /* border-width: 1px; */
-    font-size: 12px;
+    /* font-size: 12px; */
 }
 
 .nav-val, .nav-link {
@@ -97,4 +98,22 @@ html {
     align-content: center;
     padding-top: 1px;
     padding-right: 2px;
+}
+
+.searchError {
+    display: flex;
+    flex-wrap: inherit;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.catbtn {
+    text-transform: uppercase;
+    background-color: antiquewhite;
+}
+
+.kb-table {
+    border: 1px solid rgb(201, 201, 201);
+    width: 15%;
+    text-align: center;
 }
