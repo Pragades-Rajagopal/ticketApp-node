@@ -11,7 +11,6 @@ Backend Update - Commercials,NA,Service Request
 Backend Update - Contract Term,NA,Service Request
 Backend Update - Prov Ready Date,NA,Service Request
 Backend Update - CPE,NA,Service Request
-Backend Update - LM Speed,NA,Service Request
 Backend Update - PO details update in charge screen,NA,Service Request
 Backend Update - Circuit/Port speed,NA,Service Request
 Backend Update - Viznet Id,NA,Service Request
@@ -45,7 +44,6 @@ Supplier/Customer Migration/Numbering Plan Change Request,NA,Service Request
 Backend Update - Routing Number for Voice Orders,NA,Service Request
 User Request - Interconnect ID generation,NA,Service Request
 Backend Update - Outpulse/Outgoing Digit/Outgoing Suma4 updated for Optimus Orders,New requirement raised to Saravana Kumar and development in progress.,Service Request
-Backend Update - Outpulse/Outgoing Digit/Outgoing Suma4 updated for Tiger Orders,NA,Service Request
 Backend Update - Parent ID for Voice Orders,NA,Service Request
 Backend Update - Project name for Voice Orders,NA,Service Request
 Backend Update - SFDC ID for Voice Orders,NA,Service Request
@@ -82,5 +80,7 @@ Charge Transfer - SECS Change order,SECS Change Order Failure. Traces have been 
 Backend Update - Supplier Name,NA,Service Request
 Backend Update - Charge for Tiger Voice Orders,NA,Service Request
 Application Latency - Multi user sessions,NA,Incident
-Backend Update - Effective Date (Mediation View) Update for Voice Orders,User request to update data in backend table,Service Request
 User Request - SL_XREF update,NA,Service Request
+Backend Update - Outpulse/Outgoing Digit/Outgoing Suma4 updated for Tiger Orders,NA,Service Request
+Backend Update - Effective Date (Mediation View) Update for Voice Orders,NA,Service Request
+Backend Update - LM Speed,LM Speed update. Planning to enable OET to enter the LM speed from front end. Concurrence received from OET recently.,Service Request

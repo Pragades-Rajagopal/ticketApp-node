@@ -16,6 +16,7 @@ router.post('/ticket-tool/config', taskValidator.configValidation, taskControlle
 router.get('/ticket-tool/v/insights', taskController.insight_page);
 router.post('/ticket-tool/search/update', taskValidator.validateTask, taskController.search_page_update);
 router.get('/ticket-tool/v/changelogs', taskController.changelog_page);
+router.get('/ticket-tool/config/view-resolutions', taskController.getResolutions);
 
 module.exports = router;
 

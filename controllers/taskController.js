@@ -232,7 +232,7 @@ function exportAllCSV (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -257,7 +257,7 @@ function exportSelectedMonth (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -291,6 +291,10 @@ const newCSV = async (filePath, resolution, comment, category) => {
             (line[0]) !== resolution).join('\n');
         
         fs.writeFile(filePath, newRecords, (err) => {
+            if (err) {
+                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+                console.log(`[${timestamp}]: Error while writing the rows in csv file`);
+            }
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: TicketCategory.csv is filtered with new data`);
         });
@@ -305,9 +309,9 @@ const resolutionToCSV = (filePath, resolution, comment, category) => {
     let ws = fs.createWriteStream(filePath, { flags: 'a' });
     fastcsv.
     write([{
-            CATEGOTY: resolution, 
-            COMMENT: comment,
-            TYPE: category
+            resolution, 
+            comment,
+            category,
         }], 
         { 
             headers:false, 
@@ -351,6 +355,17 @@ async function newResolution_put (req, res) {
 
 }
 
+function getResolutions(req, res) {
+
+    taskModel.ticketCategory((result) => {
+        taskModel.getMonths((month) => {
+            res.render('allresolutions', {MONTH: month, result: result});
+        })
+    });
+    let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+    console.log(`[${timestamp}]: Resolutions page was viewed`);
+}
+
 function insight_page (req, res) {
     res.render('insights');
 };
@@ -373,6 +388,7 @@ module.exports = {
     search_page_update,
     changelog_page,
     getTicketDataAll,
-    getTicketDataByCategory
+    getTicketDataByCategory,
+    getResolutions
 };
 
