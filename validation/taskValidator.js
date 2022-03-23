@@ -35,8 +35,8 @@ exports.configValidation = [
     .withMessage("Ticket category is mandatory")
 ];
 
-exports.searchValidation = [
-    check('ticketnum')
+exports.deleteResolution = [
+    check('DESCRDEL')
     .isLength({min:1})
-    .withMessage("Search with a ticket number!")
+    .withMessage("Enter the resolution to delete")
 ];

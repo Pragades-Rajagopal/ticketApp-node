@@ -20,10 +20,9 @@ let users = [{'user':'Bharat'}, {'user':'Harish'}, {'user':'Keerthi'}, {'user':'
 function index_page_get (req, res) {
     
     taskModel.ticketCategory((resolution) => {
-
         taskModel.getMonths((month) => {
-
-            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, errors:{}, MONTH: month});
+            res.locals.title = "Ticket Tool";
+            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, errors:{}, MONTH: month, errors: {}, actionmsg: null});
         });
         
     });
@@ -38,7 +37,8 @@ function index_page_post (req, res) {
         taskModel.ticketCategory((resolution) => {
             // console.log(resolution)
             taskModel.getMonths((month) => {
-                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:errors.mapped()});
+                res.locals.title = "Ticket Tool";
+                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:errors.mapped(), actionmsg: null});
             });
             
         });
@@ -59,9 +59,13 @@ function index_page_post (req, res) {
     const checkValue = xpressn.test(TICKET);
 
     if (checkValue === false) {
+        const actionmsg = "Ticket number contains (special) characters!";
+
         let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
         console.log(`[${timestamp}]: Ticket "${TICKET}" contains character and app failed to post the data. [Responsible user: ${USER}]`);
 
+        res.cookie({actionmsg: actionmsg});
+        res.locals.title = "Ticket Tool";
         res.redirect('/ticket-tool');
         return;
     }
@@ -83,7 +87,8 @@ function index_page_post (req, res) {
             // console.log(result);
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Ticket "${TICKET}" logged in the application with data: ["${DESCR}", "${CATEGORY}", "${COMMENT}", "${USER}"]`);
-
+            
+            res.locals.title = "Ticket Tool";
             res.redirect('/ticket-tool');
         });
     });
@@ -96,12 +101,12 @@ function search_ticket (req, res) {
     const xpressn = /^\s*$/;
     const ticketIsNull = xpressn.test(ticket);
 
-    const errors = validationResult(req);
-
     if (ticketIsNull === true) {
         taskModel.ticketCategory((resolution) => {
             taskModel.getMonths((month) => {
-                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors: errors.mapped()});
+                const actionmsg = "Search with a ticket number!"
+                res.locals.title = "Ticket Tool";
+                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:{}, actionmsg: actionmsg});
                 
             });
         });
@@ -123,7 +128,8 @@ function search_ticket (req, res) {
                 let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
                 console.log(`[${timestamp}]: Ticket "${ticket}" was searched in the application`);
 
-                res.render('search', {resolution: resolution, result: result, MONTH: month, errors: {}});
+                res.locals.title = "Ticket Tool - Search";
+                res.render('search', {resolution: resolution, result: result, MONTH: month, errors: {}, actionmsg: null});
             });
         });
         
@@ -142,7 +148,8 @@ function search_page_update (req, res) {
         taskModel.searchTicket(TICKET, (value) => {
             taskModel.ticketCategory((resolution) => {
                 taskModel.getMonths((month) => {
-                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors: errors.mapped()});
+                    res.locals.title = "Ticket Tool - Search";
+                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors: errors.mapped(), actionmsg: null});
                 });
             });
         });
@@ -162,8 +169,9 @@ function search_page_update (req, res) {
                 taskModel.getMonths((month) => {
                     let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
                     console.log(`[${timestamp}]: Ticket "${TICKET}" was updated with data: ["${DESCR}", "${CATEGORY}","${COMMENT}"]`);
-
-                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors:{}});
+                    const actionmsg = "Ticket detail updated successfully!"
+                    res.locals.title = "Ticket Tool - Search";
+                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors:{}, actionmsg: actionmsg});
                 });
             });
         });
@@ -187,6 +195,7 @@ function getTicketData (req, res) {
                     let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
                     console.log(`[${timestamp}]: Viewed ticket details for month: ${MON}`);
 
+                    res.locals.title = `Ticket Tool - View data for ${MON}`;
                     res.render('viewdata', {result: result, MONTH: month, MON: MON, i_count: i_count, r_count: r_count});
                 });
             });
@@ -198,6 +207,7 @@ function getTicketDataByCategory (req, res) {
 
     taskModel.getDataByCategory(monthForCat, (result) => {
         taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - View by Category";
             res.render('viewdataByCat', {MONTH: month, MON: monthForCat, result: result});
 
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
@@ -213,6 +223,7 @@ function getTicketDataAll (req, res) {
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Viewed ticket details for all months`);
 
+            res.locals.title = "Ticket Tool - View all data";
             res.render('viewdata', {result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {}});
         });
     })
@@ -232,7 +243,7 @@ function exportAllCSV (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export All</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -257,7 +268,7 @@ function exportSelectedMonth (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export for "+ MON +"</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -266,99 +277,116 @@ function exportSelectedMonth (req, res) {
     });
 };
 
-function newResolution_get (req, res) {
+function configurations_get (req, res) {
 
     taskModel.ticketCategory((resolution) => {
         taskModel.getMonths((month) => {
-            res.render('config', {MONTH: month, resolution: resolution, errors:{}});
-        })
-    });
-};
-
-const newCSV = async (filePath, resolution, comment, category) => {
-    // This function will filter the old data and write a new CSV file
-    // if "Resolution1" is already available and user configures it to "Resolution2"
-    // Resolution1 will be filtered/removed and new CSV will be created and Resolution2 will be appended by resolutionToCSV()
-    fs.readFile(filePath, 'utf8', (err, data) => {
-
-        if (err) {
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Error while deleting the row in csv file`);
-        }
-        
-        let records = data.split('\n').map(line => line.split(','));
-        let newRecords = records.filter(line => 
-            (line[0]) !== resolution).join('\n');
-        
-        fs.writeFile(filePath, newRecords, (err) => {
-            if (err) {
-                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                console.log(`[${timestamp}]: Error while writing the rows in csv file`);
-            }
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: TicketCategory.csv is filtered with new data`);
+            res.locals.title = "Ticket Tool - Configurations";
+            res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: null});
         });
-
-        resolutionToCSV(filePath, resolution, comment, category);
     });
-
 };
 
-const resolutionToCSV = (filePath, resolution, comment, category) => {
+function newResolution_put (req, res) {
 
-    let ws = fs.createWriteStream(filePath, { flags: 'a' });
-    fastcsv.
-    write([{
-            resolution, 
-            comment,
-            category,
-        }], 
-        { 
-            headers:false, 
-            includeEndRowDelimiter: true 
-        }).pipe(ws);
-    
-    let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-    console.log(`[${timestamp}]: New resolution was configured ["${resolution}", "${comment}", "${category}"]`);
-};
-
-async function newResolution_put (req, res) {
+    let actionmsg;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         taskModel.ticketCategory((resolution) => {
             taskModel.getMonths((month) => {
-                res.render('config', {MONTH: month, resolution: resolution, errors: errors.mapped()});
+                res.locals.title = "Ticket Tool - Configurations";
+                res.render('config', {MONTH: month, resolution: resolution, errors: errors.mapped(), actionmsg: null});
             })
         });        
         return;
     };
 
-    const resolution = req.body.DESCR;
+    var resolution = req.body.DESCR;
+    resolution = resolution.trim();
     var comment = req.body.COMMENT;
     const category = req.body.CATEGORY;
-    const filePath = path.resolve(__dirname, '../', 'category', 'ticketCategory.csv');
-    // console.log(resolution, filePath);
 
     // if the comment is not passed, value is set as NA by default
     if (!comment) {
         comment = 'NA'
     }
 
-    newCSV(filePath, resolution, comment, category); 
-    
-    taskModel.ticketCategory((resolution) => {
-        taskModel.getMonths((month) => {
-            res.render('config', {MONTH: month, resolution: resolution, errors:{}});
-        })
+    actionmsg = `Resolution "${resolution}" configured/ updated successfully!`;
+
+    taskModel.searchResolution(resolution, (result) => {
+        if (result.length === 0) {
+            taskModel.putResolution('INSERT', resolution, comment, category, (data) => {
+                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+                console.log(`[${timestamp}]: New resolution was configured ["${resolution}", "${comment}", "${category}"]`);
+                return;
+            });
+        }
+        else {
+            taskModel.putResolution('UPDATE', resolution, comment, category, (data1) => {
+                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+                console.log(`[${timestamp}]: Resolution ["${resolution}"] was updated ["${comment}", "${category}"]`);
+            });
+        }
     });
 
-}
+    taskModel.ticketCategory((resolution) => {
+        taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - Configurations";
+            res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: actionmsg});
+        });
+    });
+};
+
+function deleteResolution(req, res) {
+
+    let actionmsg;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        taskModel.ticketCategory((resolution) => {
+            taskModel.getMonths((month) => {
+                res.locals.title = "Ticket Tool - Configurations";
+                res.render('config', {MONTH: month, resolution: resolution, errors: errors.mapped(), actionmsg: null});
+            });
+        });
+        return;
+    }
+
+    var resolution = req.body.DESCRDEL;
+    resolution = resolution.trim();
+
+    taskModel.searchResolution(resolution, (result) => {
+        if(result.length === 0) {
+            actionmsg = "Resolution is not available to delete!"
+            taskModel.ticketCategory((resolution) => {
+                taskModel.getMonths((month) => {
+                    res.locals.title = "Ticket Tool - Configurations";
+                    res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: actionmsg});
+                });
+            });
+            return;
+        }
+
+        taskModel.delResolution(resolution, (data) => {
+            actionmsg = `Resolution "${resolution}" deleted successfully!`;
+            taskModel.ticketCategory((resolution) => {
+                taskModel.getMonths((month) => {
+                    res.locals.title = "Ticket Tool - Configurations";
+                    res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: actionmsg});
+                });
+            });
+            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+            console.log(`[${timestamp}]: Resolution ["${resolution}"] was deleted`);
+        });
+    });
+};
 
 function getResolutions(req, res) {
 
     taskModel.ticketCategory((result) => {
         taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - All Resolutions";
             res.render('allresolutions', {MONTH: month, result: result});
         })
     });
@@ -382,13 +410,14 @@ module.exports = {
     search_ticket,
     exportSelectedMonth,
     getTicketData,
-    newResolution_get,
+    configurations_get,
     newResolution_put,
     insight_page,
     search_page_update,
     changelog_page,
     getTicketDataAll,
     getTicketDataByCategory,
-    getResolutions
+    getResolutions,
+    deleteResolution
 };
 

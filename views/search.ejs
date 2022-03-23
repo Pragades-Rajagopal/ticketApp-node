@@ -2,8 +2,14 @@
 
 <br>
 
-<div class="container">
+<div class="container container-shrink">
     <h3 class="heading">TICKET DETAIL</h3>
+    <% if (actionmsg) { %>
+        <label id="config-action-label" class="config-label">
+            <%= actionmsg %>
+            <button class="config-label-btn" onclick="toggle(this)">X</button>
+        </label>
+    <% } %>
     <form action="/ticket-tool/search/update" method="post">
         <div class="mb-3">
             <table class="table table-no-border">
@@ -12,14 +18,14 @@
                         <% if (errors.CATEGORY) { %>
                             <div class="text-danger mb-3"><%= errors.null %></div>
                         <% } %>
-                        <label for="inputTicket">Ticket Number</label>
+                        <label class="search-page-lbl" for="inputTicket">Ticket Number</label>
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputTicket" name="Ticket" value="<%= result.TICKET %>" readonly>
                     </td>
                     <td>
                         <% if (errors.CATEGORY) { %>
                             <div class="text-danger mb-3"><%= errors.CATEGORY.msg %></div>
                         <% } %>
-                        <label style="font-style: italic;" for="inputCategory">Ticket Category</label>
+                        <label class="search-page-lbl" style="font-style: italic;" for="inputCategory">Ticket Category</label>
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputCategory" name="CATEGORY" value="<%= result.TICKET_TYPE %>" list="category">
                         <datalist id="category">
                             <option value="Incident">
@@ -31,7 +37,7 @@
             <% if (errors.DESCR) { %>
                 <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
             <% } %>
-            <label style="font-style: italic;" for="inputDescr">Ticket Description</label>
+            <label class="search-page-lbl" style="font-style: italic;" for="inputDescr">Ticket Description</label>
             <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputDescr" name="DESCR" value="<%= result.RESOLUTION %>" onchange="updateComment()" list="resol">
             <datalist id="resol">
                 <% resolution.forEach((resolution, index)=>{%>
@@ -42,20 +48,20 @@
             <% if (errors.COMMENT) { %>
                 <div class="text-danger mb-3"><%= errors.COMMENT.msg %></div>
             <% } %>
-            <label style="font-style: italic;" for="inputComment">Detailed Description</label>
+            <label class="search-page-lbl" style="font-style: italic;" for="inputComment">Detailed Description</label>
             <textarea autofocus class="form-control shadow-none mb-3 phText" id="inputComment" name="COMMENT"><%= result.COMMENT %></textarea>
             <table class="table table-no-border">
                 <tr>
                     <td>
-                        <label for="inputUser">Resolved by</label>
+                        <label class="search-page-lbl" for="inputUser">Resolved by</label>
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputUser" name="USER" value="<%= result.RESOLVED_BY %>" readonly>
                     </td>
                     <td>
-                        <label for="inputApp">Application name</label>
+                        <label class="search-page-lbl" for="inputApp">Application name</label>
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputApp" name="APP" value="<%= result.APP_NM %>" readonly>
                     </td>
                     <td>
-                        <label for="inputCreated">Created on (GMT)</label>
+                        <label class="search-page-lbl" for="inputCreated">Created on (GMT)</label>
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputCreated" name="CREATED" value="<%= result.CREATED_ON %>" readonly>
                     </td>
                 </tr>
@@ -67,6 +73,13 @@
 </div>
 
 <script src="../public/scripts/selector.js"></script>
+
+<script>
+    let toggle = () => {
+        let label = document.getElementById("config-action-label");
+        label.setAttribute("hidden", "hidden");
+    }
+</script>
 
 <%- include('footer') %>
 

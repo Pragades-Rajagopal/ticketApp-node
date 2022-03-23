@@ -1,12 +1,16 @@
 <%- include('header') %>
 <br>
-<div class="container">
+<div class="container container-shrink">
     <h3 class="heading">TICKET TRACKING APPLICATION</h3>
+    <% if (actionmsg) { %>
+        <label id="config-action-label" class="config-label">
+            <%= actionmsg %>
+            <button class="config-label-btn" onclick="toggle(this)">X</button>
+        </label>
+    <% } %>
     <form action="/ticket-tool" method="post">
         <div class="mb-3">
-            <% if (errors.ticketnum) { %>
-                <div class="text-danger mb-3 searchError"><%= errors.ticketnum.msg %></div>
-            <% } %>
+            <br>
             <table class="table table-no-border">
                 <tr>
                     <td>
@@ -75,6 +79,13 @@
 </div>
 
 <script src="../public/scripts/selector.js"></script>
+
+<script>
+    let toggle = () => {
+        let label = document.getElementById("config-action-label");
+        label.setAttribute("hidden", "hidden");
+    }
+</script>
 
 <%- include('footer') %>
 

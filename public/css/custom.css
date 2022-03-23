@@ -4,7 +4,7 @@
     text-align: center;
     text-decoration: solid;
     /* border-radius: 10px; */
-    text-transform: uppercase;
+    text-transform: lowercase;
 }
 
 .subHeading {
@@ -18,12 +18,24 @@
 }
 
 .cpny-lg {
-    background-color: slateblue;
-    color: wheat;
+    /* background-color: slateblue */
+    /* background-color: hsl(248, 53%, 58%, 85%); */
+    color: slateblue;
+}
+
+.insights-link {
+    color: hsl(248, 53%, 58%, 85%);
+    text-decoration: none;
+    padding-left: 2px;
+}
+
+.insights-link:hover {
+    color: #000000;
 }
 
 html {
     zoom: 100%;
+    /* background-color: hsl(248, 53%, 58%, 85%); */
 }
 
 .mb-3 {
@@ -70,7 +82,10 @@ html {
 }
 
 .count {
-    padding: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     background-color: #968bdf;
     table-layout: auto;
     text-transform: uppercase;
@@ -114,6 +129,37 @@ html {
 
 .kb-table {
     border: 1px solid rgb(201, 201, 201);
-    width: 15%;
+    width: 20%;
     text-align: center;
+}
+
+.container-shrink 
+{ max-width: 900px; }
+
+.config-label {
+    background-color: hsl(39, 100%, 50%, 20%);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-transform: uppercase;
+    font-style: solid;
+    border: hsl(39, 100%, 50%, 50%);;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.config-label-btn {
+    padding-left: 5px;
+    text-align: center;
+    background: none;
+    border-style: none;
+    color: red;
+}
+
+.search-page-lbl {
+    padding-left: 4px;
+    padding-bottom: 2px;
 }

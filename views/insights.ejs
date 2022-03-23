@@ -1,6 +1,6 @@
 <head>
     <link rel="icon" type="image/png"  href="/public/favicon/ticket64.png">
-    <title>Ticket Tool-Insights</title>
+    <title>Ticket Tool - Insights</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom.css">
 </head>
@@ -10,7 +10,7 @@
     <a accesskey="0" class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
     <a class="navbar-brand" href="/ticket-tool">Home</a>
     <br>
-    <h3>Insights</h3>
+    <h3>insights</h3>
     <p>Ticket tool is designed using Node.js, Express and SQLite database. This application is designed based on MVC architectural pattern (Model, View and Controller components).</p>
     <p>Controller is the bridge between Model and View components.</p>
     <p>
@@ -33,7 +33,7 @@
             <li>Need to debug <i><u>exportAllCSV()</u> function</i> for EXPORT ALL and <i><u>exportPrevMon()</u> function</i> for EXPORT FOR X month</li>
             <li>Check if the data is fetched from the respective function in Model / proper arguments are passed in the above functions</li>
         </ul>
-        <li><b>Resolution is not added from the CONFIG page</b>, check in <i>./category</i> directory if the new resolution is appended in the ticketCategory.csv file. <br>&emsp;&emsp; Debug <i><u>newResolution_put()</u> function</i> for write operation</li>
+        <li><b>Resolution is not added/deleted from the CONFIG page</b>, debug <i><u>newResolution_put()</u> function</i> for insert & update operations and <i><u>deleteResolution()</u> function</i> for delete operation</li>
         <br>
         <li><b>Database operation issue</b>, check for the respective function in Model</li>
         <ul>
