@@ -1,25 +1,46 @@
 <head>
     <link rel="icon" type="image/png"  href="/public/favicon/ticket64.png">
-    <title>Ticket Tool-Changelogs</title>
+    <title>Ticket Tool - Changelogs</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
 </head>
 
 <div class="container">
     <br>
-    <a class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
+    <a accesskey="0" class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
     <a class="navbar-brand" href="/ticket-tool">Home</a>
     <a class="navbar-brand" href="/ticket-tool/v/insights">Back</a></h2>
-    <h3>Changelogs</h3>
+    <h3>changelogs</h3>
+    <br>
+    <p><u>Version 1.3.1</u> - 2022/03/23</p>
+    <li>Resolutions table is created in db (earlier resolutions were configured & read from csv file)</li>
+    <li>Code is changed to configure & read resolutions from above table</li>
+    <li>Added delete resolution</li>
+    <li>Handled code to trim leading and trailing spaces while configuring and deleting a resolution (this will avoid duplicates)</li>
+    <li>Messages will pop-up upon configuring, updating and deleting the resolution</li>
+    <li>Minor UI changes</li>
+    <br>
+    <p><u>Version 1.3</u> - 2022/03/20</p>
+    <li>Changes in Configuration page - Resolution, comment & type can be configured together - <i>Regression-Handled in v1.3.1</i></li>
+    <li>Existing resolution will be overwritten with the latest comments (to avoid duplicates) - <i>Regression-Handled in v1.3.1</i></li>
+    <li>Comment and ticket type will auto-populate based on the selected resolution in Home & Search pages</li>
+    <li>Added page to view all the configured resolutions</li>
+    <li>Introduced view to ticket details by category for the selected month</li>
+    <li>Handled validation for Ticket number field which will restrict any characters/special characters to post the data</li>
+    <li>Incident & Request count label is removed while viewing data for All months (since values are not displayed in previous versions)</li>
+    <li>Empty ticket search is handled which was previously routed to search page</li>
+    <li>Added access key bindings for ease of access</li>
     <br>
     <p><u>Version 1.2</u> - 2022/02/27</p>
     <li>Introduced log capturing feature to trace all the actions performed by the users</li>
-    <li>Minor code changes (to handle datatype conversion for Ticket number field) & UI changes</li>
+    <li>Minor code changes (to handle datatype conversion for Ticket number field - <i>Regression-Handled in v1.3</i>) & UI changes</li>
     <br>
     <p><u>Version 1.1.1</u> - 2022/01/24</p>
     <li>Added Incident and SR count for the month</li>
-    - 2022/01/27
+    #2022/01/27
+    <ul>
     <li>Added option to view all data</li>
     <li>Introduced filter, search options in view page</li>
+    </ul>
     <br>
     <p><u>Version 1.1</u> - 2022/01/22</p>
     <li>Minor UI changes in launch and search pages</li>

@@ -1,0 +1,43 @@
+<%- include('header') %>
+
+<script>
+    $(document).ready( function () {
+        $('#myTable1').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true
+        });
+    } );
+</script>
+
+<br>
+<div class="container">
+    <div class="table-responsive-sm">
+        <h3 class="heading">CONFIGURED RESOLUTIONS</h3>
+        <br>
+        <table id="myTable1" class="table table-hover table-cat">
+            <thead>
+                <tr style="background-color: #968bdf;">
+                    <th>Resolution</th>
+                    <th>Comment</th>
+                    <th>Ticket type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (const val of result) { %>
+                    <tr>
+                        <td><%= val.CATEGORY %></td>
+                        <td><%= val.COMMENT %></td>
+                        <td><%= val.TYPE %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <br>
+        <a class="btn btn-outline-dark cancel" href="/ticket-tool/config">Back</a>
+        <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+    </div>
+</div>
+
+<%- include('footer') %>
+
