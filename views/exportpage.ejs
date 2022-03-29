@@ -1,0 +1,83 @@
+<head>
+    <link rel="icon" type="image/png" href="/public/favicon/ticket64.png">
+    <title>Ticket Tool - Export Page</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.css">
+    <link rel="stylesheet" href="/public/css/custom.css">
+</head>
+<div class="container">
+    <br>
+    <a class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
+    <h3>export page</h3>
+    <% if (actionmsg) { %>
+        <label id="config-action-label" class="config-label">
+            <%= actionmsg %>
+            <button class="config-label-btn" onclick="toggle(this)">X</button>
+        </label>
+    <% } %>
+    <form action="/ticket-tool/export" method="post">
+        <table class="export-page-table-2">
+            <tr>
+                <br>
+                <td>Export data^ for</td>
+                <td> 
+                    <select class="btn-sm" id="month" name="SELECTED_MON">
+                        <% month.forEach((month)=>{%>
+                            <option value=<%= month %>>
+                                <%= month %></option>
+                            <%})%>
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary btn-sm">EXPORT</button>
+                </td>
+            </tr>
+        </table>
+        <p style="color: hsl(271, 76%, 53%, 75%);">^This option will download the data for the selected month</p>
+    </form>
+    <form action="/ticket-tool/export-data" method="post">
+        <table class="export-page-table">
+             <tr>
+                <br>
+                <td>Export data* from</td>
+                <td> 
+                    <select class="btn-sm" id="month" name="FROM">
+                        <% rev_month.forEach((rev_month)=>{%>
+                            <option value=<%= rev_month %>>
+                                <%= rev_month %></option>
+                            <%})%>
+                    </select>
+                </td>
+                <td>to</td>
+                <td>
+                    <select class="btn-sm" id="month" name="TO">
+                        <% month.forEach((month)=>{%>
+                            <option value=<%= month %>>
+                                <%= month %></option>
+                            <%})%>
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary btn-sm">EXPORT</button>
+                </td>
+            </tr>          
+        </table>
+        <p style="color:lightsalmon;">*This option will allow to download the data range for the span of last 12 months</p>
+    </form>
+    <br>
+    <a class="export-all-link" href="/ticket-tool/export-data/exportAll">EXPORT ALL DATA</a> (Ticket details are available from "<%= monthFrom.MON %>" to "<%= monthTo.MON %>" in the system. This will export all the data)
+    <br><br>
+    <a accesskey="0" class="btn btn-outline-dark cancel" href='/ticket-tool'>GO HOME</a>
+</div>
+
+<% if(filename) { %>
+    <a href='/public/exports/<%= filename %>' download='<%= filename %>' id='download-link'></a>
+<% } %>
+
+<script>
+    let toggle = () => {
+        let label = document.getElementById("config-action-label");
+        label.setAttribute("hidden", "hidden");
+    }
+
+    document.getElementById('download-link').click();
+</script>

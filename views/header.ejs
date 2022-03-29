@@ -25,41 +25,23 @@
             <div class="collapse navbar-collapse me-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                     <li class="nav-item">
-                        <a accesskey="1" class="nav-link nav-val" href="/ticket-tool/exportAll">EXPORT ALL</a>
+                        <a accesskey="1" class="nav-link nav-val btn-hover" href="/ticket-tool/export-data">EXPORT</a>
                     </li> 
-                </ul>
-                <form id="month" class="wrap-ctn" action="/ticket-tool/export" method="post">
-                    <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-                        <li class="nav-item">
-                            <select class="btn-sm" id="month" name="MONTH">
-                                <% MONTH.forEach((MONTH)=>{%>
-                                    <option value=<%= MONTH.MON%>>
-                                        <%= MONTH.MON %></option>
-                                    <%})%>
-                            </select>
-                        </li>
-                        <li class="nav-item">
-                            <button accesskey="2" class="btn btn-nav btn-sm">EXPORT</button>
-                        </li>
-                    </ul>
-                </form>
-                <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a accesskey="3" class="nav-link" href="/ticket-tool/viewAll">VIEW ALL</a>
-                    </li>
-                </ul>                 
+                </ul>                
                 <form id="viewmonth" class="wrap-ctn" action="/ticket-tool/viewdata" method="post">
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                         <li class="nav-item">
-                            <select class="btn-sm" id="viewmonth" name="viewMONTH">
+                            <select class="btn-sm dd-sm" id="viewmonth" name="viewMONTH">
                                 <% MONTH.forEach((MONTH)=>{%>
                                     <option value=<%= MONTH.MON%>>
                                         <%= MONTH.MON %></option>
                                     <%})%>
+                                    <option value='-' disabled>―――――</option>
+                                    <option value="All">All Months</option>
                             </select>
                         </li>
                         <li class="nav-item">
-                            <button accesskey="4" class="btn btn-nav btn-sm">VIEW DATA</button>
+                            <button accesskey="2" class="btn btn-nav btn-sm">VIEW</button>
                         </li>
                     </ul>
                 </form>
@@ -67,7 +49,7 @@
                 <form id="search" action="/ticket-tool/search" method="post">
                     <input class="searchbox-col" type="number" name="ticketnum" placeholder="enter ticket to search">
                 </form>
-                <a accesskey="6" class="nav-link" href="/ticket-tool/config"><span class="gear">&#9776;</span></a>
+                <a accesskey="4" class="nav-link" href="/ticket-tool/config"><span class="gear">&#9776;</span></a>
             </div>
         </div>
     </nav>

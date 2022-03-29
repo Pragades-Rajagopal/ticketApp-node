@@ -1,88 +1,30 @@
 // const moment = require('moment');
 
-// let utc = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+// // let utc = moment.utc().format('YYYY/MM/DD hh:mm:ss');
 // let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
 
-// console.log(utc);
-// console.log(MON);
+// let months = []
 
-// const path = require('path');
-// // // console.log(path.resolve(__dirname, 'database', 'data.sqlite3'));
-// const filePath = path.resolve(__dirname, 'public');
-// console.log(filePath);
-// let time = moment.utc().format('YYYYMMDDhhmmss');
-// const filename = 'ticketAll_' + time + '.csv';
-// const endPath = filePath + '\\' + filename;
-// console.log(endPath);
+// for (let i = 0; i < 12; i++) {
+//     months.push(
+//          {month: moment.utc().subtract(i,'months').format('MMMYYYY')}
+//     );
+// }
 
-// var cat = [];
-// const csv = require('csv-parser');
-// const fs = require('fs');
-// const file = path.resolve(__dirname, 'category', 'ticketCategory.csv');
-// fs.createReadStream(file).pipe(csv()).on('data', (row)=> {
-//     cat.push(row);
-// }).on('end', () => {
-//     console.log(cat);
-// });
+// let newData = []
 
-// console.log(cat);
+// for (let i = 0; i < months.length; i++) {
+//     newData.push(months[i]['month']);
+// }
 
-// var express = require("express");
-// var app = express();
-// var http = require("http").createServer(app);
-// var fileSystem = require("fs");
-// var fastcsv = require("fast-csv");
- 
-// app.use("/public", express.static(__dirname + "/public"));
- 
-// http.listen(3000, function () {
-//     console.log("Connected");
- 
-//     app.get("/exportData", function (request, result) {
- 
-//         var data = [{
-//             "id": 1,
-//             "name": "Max",
-//             "age": 29
-//         }, {
-//             "id": 2,
-//             "name": "Alexi",
-//             "age": 31
-//         }, {
-//             "id": 3,
-//             "name": "Murdoch",
-//             "age": 33
-//         }];
- 
-//         var ws = fileSystem.createWriteStream("public/data.csv");
-//         fastcsv
-//             .write(data, { headers: true })
-//             .on("finish", function() {
- 
-//                 result.send("<a href='/public/data.csv' download='data.csv' id='download-link'></a><script>document.getElementById('download-link').click();</script><a href='#'>Export for previous month</a>");
-//             })
-//             .pipe(ws);
-//     });
-// });
+// let from = newData.indexOf("Jan2022");
+// let to = newData.indexOf("Aug2021");
 
-const { Console } = require("console");
-// get fs module for creating write streams
-// const fs = require("fs");
-const path = require('path');
-const fileLogs = path.resolve(__dirname, 'logs', 'logs.txt');
-const fileError = path.resolve(__dirname, 'logs', 'error.txt');
+// let result = newData.slice(from, to+1)
 
-// make a new logger
-// const myLogger = new Console({
-//   stdout: fs.createWriteStream(fileLogs),
-//   stderr: fs.createWriteStream(fileError),
-// });
+// console.log(newData.reverse())
+// console.log(months);
 
-// // saving to normalStdout.txt file
-// myLogger.log("Hello! This will be saved in normalStdout.txt file");
-
-// // saving to errStdErr.txt file
-// myLogger.error("Its an error ❌. This will be saved in errStdErr.txt file");
-const fs = require('fs');
-const myConsole = new console.Console(fs.createWriteStream(fileLogs));
-myConsole.log('hello world!!!');
+let list = [ 'Mar2022', 'Feb2022', 'Jan2022', 'Dec2021', 'Nov2021' ];
+const array = list[list.length - 1];
+console.log(array)
