@@ -72,7 +72,7 @@ const putResolution = (action, resolution, comment, category, callback) => {
 };
 
 const delResolution = (resolution, callback) => {
-    const sql = "DELETE FROM  resolutions WHERE CATEGORY = ?";
+    const sql = "DELETE FROM resolutions WHERE CATEGORY = ?";
 
     database.appDatabase.run(sql, [resolution], (err) => {
         if (err) {
@@ -106,10 +106,38 @@ const getMonths = (callback) => {
     });
 };
 
+const getAllDistinctMonths = (callback) => {
+
+    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET DESC";
+
+    database.appDatabase.all(sql, [], (err, row) => {
+        if (err) {
+            callback(err.message);
+        }
+        callback(row);
+    });
+};
+
 const exportMonth = (mon, callback) => {
     const sql = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
 
     database.appDatabase.all(sql, [mon], (err, rows) => {
+        if (err) {
+            callback(err.message);
+        }
+
+        callback(rows);
+    });
+};
+
+const exportMonthRange = (mon, callback) => {
+    // This function will frame the sql query based on the input passed from exportForRange() with array of months
+    const selectClause = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE";
+    const orderClause = "ORDER BY TICKET DESC";
+    var whereClause = ' MON IN (\"' + mon.join("\",\"") + '\")';
+    const sql = selectClause + whereClause + orderClause;
+
+    database.appDatabase.all(sql, [], (err, rows) => {
         if (err) {
             callback(err.message);
         }
@@ -207,6 +235,8 @@ module.exports = {
     getDataByCategory,
     searchResolution,
     putResolution,
-    delResolution
+    delResolution,
+    getAllDistinctMonths,
+    exportMonthRange
 };
 

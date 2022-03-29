@@ -54,7 +54,7 @@
                         <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputApp" placeholder="Select application *" name="APP" list="app">
                         <datalist id="app">
                             <% app_nm.forEach((app_nm)=>{%>
-                                <option id=<%= users_.user%>>
+                                <option id=<%= app_nm.name%>>
                                     <%= app_nm.name %></option>
                                 <%})%>
                         </datalist>

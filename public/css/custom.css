@@ -71,8 +71,17 @@ html {
     align-items: center;
 }
 
+.btn-hover:hover, .gear:hover {
+    color: #000 !important;
+}
+
 .wrap-ctn {
-    background-color: rgb(123, 104, 243);
+    border-width: 1px;
+    border-style: solid;
+    padding-left: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 4px;
 }
 
 .footwrapper {
@@ -105,8 +114,12 @@ html {
 
 .para-hl-link {
     text-decoration: none;
-    color: orangered;
+    color: red;
     font-style: italic;
+}
+
+.para-hl-link:hover {
+    color: blue;
 }
 
 .app-logo {
@@ -156,10 +169,40 @@ html {
     text-align: center;
     background: none;
     border-style: none;
-    color: red;
+    color: hsl(0, 100%, 50%);
+}
+
+.config-label-btn:hover {
+    background-color: hsl(0, 100%, 50%, 20%);
+    border-radius: 15px;
 }
 
 .search-page-lbl {
     padding-left: 4px;
     padding-bottom: 2px;
+}
+
+.export-all-link {
+    text-decoration: none;
+    padding-left: -10px;
+}
+
+.export-all-link:hover {
+    color: red;
+}
+
+.export-page-table td {
+    background-color: lightsalmon;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.export-page-table-2 td {
+    background-color: hsl(271, 76%, 53%, 35%);
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
