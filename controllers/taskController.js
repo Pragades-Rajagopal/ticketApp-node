@@ -13,17 +13,16 @@ console.file(logfileName);
 // let prevMON = moment.utc().subtract(1,'months').format('MMMYYYY');
 // let curMON = moment.utc().format('MMMYYYY');
 
-let app_nm = [{'name':'REPC'}, {'name':'TIGER'}, {'name':'RERT'}, {'name':'MSPS'}, {'name':'REACT'}];
-let users = [{'user':'Bharat'}, {'user':'Harish'}, {'user':'Pragadeswar'}, {'user':'Saibhargavi'}, {'user':'Sucharitha'}, {'user':'Surandranath'}];
+let app_nm = [{'name':'REPC'}, {'name':'TIGER'}, {'name':'RERT'}];
+let users = [{'user':'Bharat'}, {'user':'Harish'}, {'user':'Keerthi'}, {'user':'Pragadeswar'}, {'user':'Saibhargavi'}, {'user':'Sucharitha'}, {'user':'Surandranath'}];
 
 
 function index_page_get (req, res) {
     
     taskModel.ticketCategory((resolution) => {
-
         taskModel.getMonths((month) => {
-
-            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, errors:{}, MONTH: month});
+            res.locals.title = "Ticket Tool";
+            res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, errors:{}, MONTH: month, errors: {}, actionmsg: null});
         });
         
     });
@@ -36,9 +35,10 @@ function index_page_post (req, res) {
     if (!errors.isEmpty()) {
         
         taskModel.ticketCategory((resolution) => {
-
+            // console.log(resolution)
             taskModel.getMonths((month) => {
-                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:errors.mapped()});
+                res.locals.title = "Ticket Tool";
+                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:errors.mapped(), actionmsg: null});
             });
             
         });
@@ -54,12 +54,18 @@ function index_page_post (req, res) {
     let timeGMT = moment.utc().format('YYYY/MM/DD hh:mm:ss');
     let MON = moment.utc().format('MMMYYYY');
 
-    const intTicket = parseInt(TICKET);
+    // To check if the ticket no. contains any character or special characters
+    const xpressn = /^[0-9]+$/;
+    const checkValue = xpressn.test(TICKET);
 
-    if (isNaN(intTicket) === true) {
+    if (checkValue === false) {
+        const actionmsg = "Ticket number contains (special) characters!";
+
         let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
         console.log(`[${timestamp}]: Ticket "${TICKET}" contains character and app failed to post the data. [Responsible user: ${USER}]`);
 
+        res.cookie({actionmsg: actionmsg});
+        res.locals.title = "Ticket Tool";
         res.redirect('/ticket-tool');
         return;
     }
@@ -70,7 +76,7 @@ function index_page_post (req, res) {
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Ticket "${TICKET}" already exists and action failed to post the data`);
 
-            res.send ("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><nav class=\"navbar\"></nav><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><h3 class='subHeading'>TICKET <u>"+ TICKET +"</u> WAS ALREADY CATEGORIZED UNDER \"<u><i>"+ result.RESOLUTION.toUpperCase() +"</i></u>\" BY "+ result.RESOLVED_BY.toUpperCase() +"!</h3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send ("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><nav class=\"navbar\"></nav><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><h3 class='subHeading'>TICKET <u>"+ TICKET +"</u> WAS ALREADY CATEGORIZED UNDER \"<u><i>"+ result.RESOLUTION.toUpperCase() +"</i></u>\" BY "+ result.RESOLVED_BY.toUpperCase() +"!</h3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
             // const err = new Error('Ticket already exist!');
             // err.statusCode = 404;
             // res.status(404).send({error: err.message});
@@ -81,7 +87,8 @@ function index_page_post (req, res) {
             // console.log(result);
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Ticket "${TICKET}" logged in the application with data: ["${DESCR}", "${CATEGORY}", "${COMMENT}", "${USER}"]`);
-
+            
+            res.locals.title = "Ticket Tool";
             res.redirect('/ticket-tool');
         });
     });
@@ -90,6 +97,21 @@ function index_page_post (req, res) {
 function search_ticket (req, res) {
 
     const ticket = req.body.ticketnum;
+    
+    const xpressn = /^\s*$/;
+    const ticketIsNull = xpressn.test(ticket);
+
+    if (ticketIsNull === true) {
+        taskModel.ticketCategory((resolution) => {
+            taskModel.getMonths((month) => {
+                const actionmsg = "Search with a ticket number!"
+                res.locals.title = "Ticket Tool";
+                res.render('index', {resolution: resolution, app_nm: app_nm, users_:users, MONTH: month, errors:{}, actionmsg: actionmsg});
+                
+            });
+        });
+        return;
+    }
 
     taskModel.searchTicket(ticket, (result) => {
         // console.log(result);
@@ -97,7 +119,7 @@ function search_ticket (req, res) {
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Ticket "${ticket}" was searched and not available in the application`);
 
-            res.send ("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><nav class=\"navbar\"></nav><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3 class='subHeading'>TICKET \""+ ticket +"\" DOES NOT EXIST!</H3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send ("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Zoinks!</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><nav class=\"navbar\"></nav><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3 class='subHeading'>TICKET \""+ ticket +"\" DOES NOT EXIST!</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
             return;
         }
         
@@ -106,7 +128,8 @@ function search_ticket (req, res) {
                 let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
                 console.log(`[${timestamp}]: Ticket "${ticket}" was searched in the application`);
 
-                res.render('search', {resolution: resolution, result: result, MONTH: month, errors: {}});
+                res.locals.title = "Ticket Tool - Search";
+                res.render('search', {resolution: resolution, result: result, MONTH: month, errors: {}, actionmsg: null});
             });
         });
         
@@ -125,7 +148,8 @@ function search_page_update (req, res) {
         taskModel.searchTicket(TICKET, (value) => {
             taskModel.ticketCategory((resolution) => {
                 taskModel.getMonths((month) => {
-                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors: errors.mapped()});
+                    res.locals.title = "Ticket Tool - Search";
+                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors: errors.mapped(), actionmsg: null});
                 });
             });
         });
@@ -145,8 +169,9 @@ function search_page_update (req, res) {
                 taskModel.getMonths((month) => {
                     let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
                     console.log(`[${timestamp}]: Ticket "${TICKET}" was updated with data: ["${DESCR}", "${CATEGORY}","${COMMENT}"]`);
-
-                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors:{}});
+                    const actionmsg = "Ticket detail updated successfully!"
+                    res.locals.title = "Ticket Tool - Search";
+                    res.render('search', {resolution: resolution, result: value, app_nm: app_nm, users_:users, MONTH: month, errors:{}, actionmsg: actionmsg});
                 });
             });
         });
@@ -155,9 +180,12 @@ function search_page_update (req, res) {
 
 };
 
+let monthForCat; 
+
 function getTicketData (req, res) {
 
     const MON = req.body.viewMONTH;
+    monthForCat = MON;
 
     taskModel.getData(MON, (result) => {
         
@@ -167,12 +195,26 @@ function getTicketData (req, res) {
                     let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
                     console.log(`[${timestamp}]: Viewed ticket details for month: ${MON}`);
 
+                    res.locals.title = `Ticket Tool - View data for ${MON}`;
                     res.render('viewdata', {result: result, MONTH: month, MON: MON, i_count: i_count, r_count: r_count});
                 });
             });
         });
     });
 };
+
+function getTicketDataByCategory (req, res) {
+
+    taskModel.getDataByCategory(monthForCat, (result) => {
+        taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - View by Category";
+            res.render('viewdataByCat', {MONTH: month, MON: monthForCat, result: result});
+
+            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+            console.log(`[${timestamp}]: Viewed ticket details by category for month: ${monthForCat}`);
+        });
+    })
+}
 
 function getTicketDataAll (req, res) {
 
@@ -181,6 +223,7 @@ function getTicketDataAll (req, res) {
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Viewed ticket details for all months`);
 
+            res.locals.title = "Ticket Tool - View all data";
             res.render('viewdata', {result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {}});
         });
     })
@@ -200,7 +243,7 @@ function exportAllCSV (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3>REPORT DOWNLOADED</H3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export All</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -225,7 +268,7 @@ function exportSelectedMonth (req, res) {
         var ws = fs.createWriteStream(endPath);
         fastcsv.write(result, {headers:true})
         .on("finish", () => {
-            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool-Export</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a><br><H3>REPORT DOWNLOADED</H3><a class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
+            res.send("<head><link rel=\"icon\" type=\"image/png\"  href=\"/public/favicon/ticket64.png\"><title>Ticket Tool - Export for "+ MON +"</title><link rel=\"stylesheet\" href=\"/public/css/bootstrap.css\"><link rel=\"stylesheet\" href=\"/public/css/custom.css\"></head><a href='/public/exports/"+ filename +"' download='"+ filename +"' id='download-link'></a><script>document.getElementById('download-link').click();</script><br><div class=\"container\"><a class=\"navbar-brand\" href=\"/ticket-tool\">TICKET TOOL</a>says <br><H3>REPORT DOWNLOADED</H3><a accesskey=\"0\" class=\"btn btn-outline-dark cancel\" href='/ticket-tool'>GO HOME</a></div>");
         })
         .pipe(ws);
 
@@ -234,42 +277,121 @@ function exportSelectedMonth (req, res) {
     });
 };
 
-function newResolution_get (req, res) {
+function configurations_get (req, res) {
 
-    taskModel.getMonths((month) => {
-        res.render('config', {MONTH: month, errors:{}});
+    taskModel.ticketCategory((resolution) => {
+        taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - Configurations";
+            res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: null});
+        });
     });
 };
 
 function newResolution_put (req, res) {
 
+    let actionmsg;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        taskModel.getMonths((month) => {
-            res.render('config', {MONTH: month, errors: errors.mapped()});
+        taskModel.ticketCategory((resolution) => {
+            taskModel.getMonths((month) => {
+                res.locals.title = "Ticket Tool - Configurations";
+                res.render('config', {MONTH: month, resolution: resolution, errors: errors.mapped(), actionmsg: null});
+            })
         });        
         return;
     };
 
-    const resolution = req.body.DESCR;
-    const filePath = path.resolve(__dirname, '../', 'category', 'ticketCategory.csv');
-    // console.log(resolution, filePath);
-    
-    let ws = fs.createWriteStream(filePath, { flags: 'a' });
-    fastcsv.
-    write([
-        {CATEGOTY: resolution}
-        ], 
-        { headers:false, 
-        includeEndRowDelimiter: true })
-        .pipe(ws);
-    
-    taskModel.getMonths((month) => {
-        res.render('config', {MONTH: month, errors:{}});
-    });  
-    
+    var resolution = req.body.DESCR;
+    resolution = resolution.trim();
+    var comment = req.body.COMMENT;
+    const category = req.body.CATEGORY;
+
+    // if the comment is not passed, value is set as NA by default
+    if (!comment) {
+        comment = 'NA'
+    }
+
+    actionmsg = `Resolution "${resolution}" configured/ updated successfully!`;
+
+    taskModel.searchResolution(resolution, (result) => {
+        if (result.length === 0) {
+            taskModel.putResolution('INSERT', resolution, comment, category, (data) => {
+                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+                console.log(`[${timestamp}]: New resolution was configured ["${resolution}", "${comment}", "${category}"]`);
+                return;
+            });
+        }
+        else {
+            taskModel.putResolution('UPDATE', resolution, comment, category, (data1) => {
+                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+                console.log(`[${timestamp}]: Resolution ["${resolution}"] was updated ["${comment}", "${category}"]`);
+            });
+        }
+    });
+
+    taskModel.ticketCategory((resolution) => {
+        taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - Configurations";
+            res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: actionmsg});
+        });
+    });
+};
+
+function deleteResolution(req, res) {
+
+    let actionmsg;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        taskModel.ticketCategory((resolution) => {
+            taskModel.getMonths((month) => {
+                res.locals.title = "Ticket Tool - Configurations";
+                res.render('config', {MONTH: month, resolution: resolution, errors: errors.mapped(), actionmsg: null});
+            });
+        });
+        return;
+    }
+
+    var resolution = req.body.DESCRDEL;
+    resolution = resolution.trim();
+
+    taskModel.searchResolution(resolution, (result) => {
+        if(result.length === 0) {
+            actionmsg = "Resolution is not available to delete!"
+            taskModel.ticketCategory((resolution) => {
+                taskModel.getMonths((month) => {
+                    res.locals.title = "Ticket Tool - Configurations";
+                    res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: actionmsg});
+                });
+            });
+            return;
+        }
+
+        taskModel.delResolution(resolution, (data) => {
+            actionmsg = `Resolution "${resolution}" deleted successfully!`;
+            taskModel.ticketCategory((resolution) => {
+                taskModel.getMonths((month) => {
+                    res.locals.title = "Ticket Tool - Configurations";
+                    res.render('config', {MONTH: month, resolution: resolution, errors:{}, actionmsg: actionmsg});
+                });
+            });
+            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+            console.log(`[${timestamp}]: Resolution ["${resolution}"] was deleted`);
+        });
+    });
+};
+
+function getResolutions(req, res) {
+
+    taskModel.ticketCategory((result) => {
+        taskModel.getMonths((month) => {
+            res.locals.title = "Ticket Tool - All Resolutions";
+            res.render('allresolutions', {MONTH: month, result: result});
+        })
+    });
     let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-    console.log(`[${timestamp}]: New resolution was configured ["${resolution}"]`);
+    console.log(`[${timestamp}]: Resolutions page was viewed`);
 }
 
 function insight_page (req, res) {
@@ -288,11 +410,14 @@ module.exports = {
     search_ticket,
     exportSelectedMonth,
     getTicketData,
-    newResolution_get,
+    configurations_get,
     newResolution_put,
     insight_page,
     search_page_update,
     changelog_page,
-    getTicketDataAll
+    getTicketDataAll,
+    getTicketDataByCategory,
+    getResolutions,
+    deleteResolution
 };
 

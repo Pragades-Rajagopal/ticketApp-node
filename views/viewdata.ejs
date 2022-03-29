@@ -12,12 +12,17 @@
 <div class="container">
     <div class="table-responsive-sm">
         <h3 class="heading">TICKET DETAILS FOR <%= MON %> (<%= result.length %>)</h3>
-        <table>
-            <tr>
-                <td class="count"><label>Incident : <%= i_count.length %></label></td>
-                <td class="count"><label>Service Request : <%= r_count.length %></label></td>
-            </tr>
-        </table>
+        <% if (MON !== 'All Months') { %>
+            <table>
+                <tr>
+                    <td class="count"><label>Incident : <%= i_count.length %></label></td>
+                    <td class="count"><label>Service Request : <%= r_count.length %></label></td>
+                </tr>
+            </table>
+            <br>
+            <a class="btn btn-outline-dark btn-sm cancel catbtn" href="/ticket-tool/viewdata/category">VIEW BY CATEGORY FOR <%= MON %></a>
+            <br>
+        <% } %>
         <br>
         <table id="myTable" class="table table-hover">
             <thead>
@@ -44,7 +49,7 @@
             </tbody>
         </table>
         <br>
-        <a class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+        <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
     </div>
 </div>
 

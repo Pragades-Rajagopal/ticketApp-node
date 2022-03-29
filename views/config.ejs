@@ -1,17 +1,104 @@
 <%- include('header') %>
+
 <br>
-<div class="container">
+<div class="container container-shrink">
     <h3 class="heading">Configuration Page</h3>
+    <% if (actionmsg) { %>
+    <label id="config-action-label" class="config-label">
+        <%= actionmsg %>
+        <button class="config-label-btn" onclick="toggle(this)">X</button>
+    </label>
+    <% } %>
     <form action="/ticket-tool/config" method="post">
         <div class="mb-3">
+            <br>
+            <h5>Add new resolution</h5>
             <% if (errors.DESCR) { %>
                 <div class="text-danger mb-3"><%= errors.DESCR.msg %></div>
             <% } %>
-            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the new resolution *" name="DESCR">
+            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the new resolution *" name="DESCR" list="resol" onchange="getComment()">
+            <datalist id="resol">
+                <% resolution.forEach((resolution, index)=>{%>
+                    <option id=<%= resolution.CATEGORY%>> 
+                        <%= resolution.CATEGORY %></option> <input id="<%= resolution.CATEGORY%>" value="<%= resolution.COMMENT %>" name="<%= resolution.TYPE %>">
+                    <%})%>
+            </datalist>
+            <label for="inputComment" style="color: red; font-style: italic; padding-left: 4px;">If not mentioned, 'NA' will be updated by default!</label>
+            <textarea autofocus type="text" class="form-control shadow-none mb-3" id="inputComment" placeholder="Enter the comment" name="COMMENT"></textarea>
+            <% if (errors.CATEGORY) { %>
+                <div class="text-danger mb-3"><%= errors.CATEGORY.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3 phText" id="inputCategory" placeholder="Enter the ticket category *" name="CATEGORY" list="category">
+            <datalist id="category">
+                <option value="Incident">
+                <option value="Service Request">
+            </datalist>
         </div>
         <button type="submit" class="btn btn-primary">SUBMIT</button>
-        <a class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
-    </form> 
+        <a class="btn btn-outline-dark cancel catbtn" href="/ticket-tool/config/view-resolutions">View resolutions</a>
+    </form>   
+    <br>
+    <h5>Delete resolution</h5>
+    <form action="/ticket-tool/config/delete" method="post">
+        <div class="mb-3">
+            <% if (errors.DESCRDEL) { %>
+                <div class="text-danger mb-3"><%= errors.DESCRDEL.msg %></div>
+            <% } %>
+            <input autofocus type="text" class="form-control shadow-none mb-3" id="inputRes" placeholder="Enter the resolution to delete *" name="DESCRDEL" list="resol1" onchange="getComment()">
+            <datalist id="resol1">
+                <% resolution.forEach((resolution, index)=>{%>
+                    <option id=<%= resolution.CATEGORY%>> 
+                        <%= resolution.CATEGORY %></option> <input id="<%= resolution.CATEGORY%>" value="<%= resolution.COMMENT %>" name="<%= resolution.TYPE %>">
+                    <%})%>
+            </datalist>
+            <button type="submit" class="btn btn-danger">DELETE</button>   
+        </div>
+    </form>
+    <br> 
+    <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
 </div>
+<br>
+<div class="container keybind container-shrink">
+    <label>KEYBINDINGS</label>
+    <table class="kb-table">
+        <tr>
+            <th style="width:65%">Action</th>
+            <th>Keys</th>
+        </tr>
+        <tr>
+            <td>Home</td>
+            <td>Alt + 0</td>
+        </tr>
+        <tr>
+            <td>Export All</td>
+            <td>Alt + 1</td>
+        </tr>
+        <tr>
+            <td>Export for Month</td>
+            <td>Alt + 2</td>
+        </tr>
+        <tr>
+            <td>View All</td>
+            <td>Alt + 3</td>
+        </tr>
+        <tr>
+            <td>View For Month</td>
+            <td>Alt + 4</td>
+        </tr>
+        <tr>
+            <td>Config page</td>
+            <td>Alt + 6</td>
+        </tr>
+    </table>
+</div>
+
+<script src="../public/scripts/selector.js"></script>
+
+<script>
+    let toggle = () => {
+        let label = document.getElementById("config-action-label");
+        label.setAttribute("hidden", "hidden");
+    }
+</script>
 
 <%- include('footer') %>
