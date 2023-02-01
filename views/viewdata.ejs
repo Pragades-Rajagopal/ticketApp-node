@@ -1,58 +1,71 @@
 <%- include('header') %>
-<br>
-<script>
-    $(document).ready( function () {
-        $('#myTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-	 order: [[0, 'desc']],
+    <br>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                order: [[0, 'desc']],
+            });
         });
-    } );
-</script>
-<div class="container">
-    <div class="table-responsive-sm">
-        <h3 class="heading">TICKET DETAILS FOR <%= MON %> (<%= result.length %>)</h3>
-        <% if (MON !== 'All Months') { %>
-            <table>
-                <tr>
-                    <td class="count"><label>Incident : <%= i_count.length %></label></td>
-                    <td class="count"><label>Service Request : <%= r_count.length %></label></td>
-                </tr>
-            </table>
-            <br>
-            <a class="btn btn-outline-dark btn-sm cancel catbtn" href="/ticket-tool/viewdata/category">VIEW BY CATEGORY FOR <%= MON %></a>
-            <br>
-        <% } %>
-        <br>
-        <table id="myTable" class="table table-hover">
-            <thead>
-                <tr style="background-color: #968bdf;">
-                    <th>Ticket No</th>
-                    <th>Resolution</th>
-                    <th>Ticket Category</th>
-                    <th>Application</th>
-                    <th>Resolved by</th>
-                    <th>Month</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (const val of result) { %>
+    </script>
+    <div class="container">
+        <div class="table-responsive-sm">
+            <h3 class="heading">TICKET DETAILS FOR <%= MON %> (<%= result.length %>)</h3>
+            <% if (MON !=='All Months' ) { %>
+                <table>
                     <tr>
-                        <td><%= val.TICKET %></td>
-                        <td><%= val.RESOLUTION %></td>
-                        <td><%= val.TICKET_TYPE %></td>
-                        <td><%= val.APP_NM %></td>
-                        <td><%= val.RESOLVED_BY %></td>
-                        <td><%= val.MON %></td>
+                        <td class="count"><label>Incident : <%= i_count.length %></label></td>
+                        <td class="count"><label>Service Request : <%= r_count.length %></label></td>
                     </tr>
+                </table>
+                <br>
+                <a class="btn btn-outline-dark btn-sm cancel catbtn" href="/ticket-tool/viewdata/category">VIEW BY
+                    CATEGORY FOR <%= MON %></a>
+                <br>
                 <% } %>
-            </tbody>
-        </table>
-        <br>
-        <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+                    <br>
+                    <table id="myTable" class="table table-hover">
+                        <thead>
+                            <tr style="background-color: #968bdf;">
+                                <th>Ticket No</th>
+                                <th>Resolution</th>
+                                <th>Ticket Category</th>
+                                <th>Application</th>
+                                <th>Resolved by</th>
+                                <th>Month</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (const val of result) { %>
+                                <tr>
+                                    <td>
+                                        <%= val.TICKET_NEW %>
+                                    </td>
+                                    <td>
+                                        <%= val.RESOLUTION %>
+                                    </td>
+                                    <td>
+                                        <%= val.TICKET_TYPE %>
+                                    </td>
+                                    <td>
+                                        <%= val.APP_NM %>
+                                    </td>
+                                    <td>
+                                        <%= val.RESOLVED_BY %>
+                                    </td>
+                                    <td>
+                                        <%= val.MON %>
+                                    </td>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                    <br>
+                    <a accesskey="0" class="btn btn-outline-dark cancel" href="/ticket-tool">Home</a>
+        </div>
     </div>
-</div>
 
 
-<%- include('footer') %>
+    <%- include('footer') %>

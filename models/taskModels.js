@@ -4,9 +4,9 @@ const database = require('../database/database');
 // const path = require('path');
 
 const insertTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, callback) => {
-    const sql = "INSERT INTO tickets (TICKET, RESOLUTION, TICKET_TYPE, COMMENT, RESOLVED_BY, APP_NM, CREATED_ON, MON) VALUES (?,?,?,?,?,?,?,?)";
+    const sql = "INSERT INTO tickets (TICKET_NEW, RESOLUTION, TICKET_TYPE, COMMENT, RESOLVED_BY, APP_NM, CREATED_ON, MON, TICKET) VALUES (?,?,?,?,?,?,?,?,?)";
 
-    database.appDatabase.run(sql, [TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON], (err) => {
+    database.appDatabase.run(sql, [TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, 0], (err) => {
         if (err) {
             callback(err.message);
         }
@@ -18,7 +18,7 @@ const insertTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREA
 
 const updateTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, callback) => {
 
-    const sql = "UPDATE tickets SET RESOLUTION = ?, TICKET_TYPE = ?, COMMENT = ? WHERE TICKET = ?";
+    const sql = "UPDATE tickets SET RESOLUTION = ?, TICKET_TYPE = ?, COMMENT = ? WHERE TICKET_NEW = ?";
 
     database.appDatabase.run(sql, [RESOLUTION, CATEGORY, DESCRIPTION, TICKET], (err) => {
         if (err) {
@@ -68,7 +68,7 @@ const putResolution = (action, resolution, comment, category, callback) => {
             callback('success');
         });
     }
-    
+
 };
 
 const delResolution = (resolution, callback) => {
@@ -83,20 +83,20 @@ const delResolution = (resolution, callback) => {
 };
 
 const exportAllCSV = (callback) => {
-    const sql = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets ORDER BY TICKET DESC";
+    const sql = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets ORDER BY TICKET DESC";
 
     database.appDatabase.all(sql, [], (err, rows) => {
         if (err) {
             callback(err.message);
         }
-        
+
         callback(rows);
     });
 };
 
 const getMonths = (callback) => {
 
-    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET DESC LIMIT 12";
+    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC LIMIT 12";
 
     database.appDatabase.all(sql, [], (err, row) => {
         if (err) {
@@ -108,7 +108,7 @@ const getMonths = (callback) => {
 
 const getAllDistinctMonths = (callback) => {
 
-    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET DESC";
+    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC";
 
     database.appDatabase.all(sql, [], (err, row) => {
         if (err) {
@@ -119,7 +119,7 @@ const getAllDistinctMonths = (callback) => {
 };
 
 const exportMonth = (mon, callback) => {
-    const sql = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+    const sql = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
 
     database.appDatabase.all(sql, [mon], (err, rows) => {
         if (err) {
@@ -132,7 +132,7 @@ const exportMonth = (mon, callback) => {
 
 const exportMonthRange = (mon, callback) => {
     // This function will frame the sql query based on the input passed from exportForRange() with array of months
-    const selectClause = "SELECT TICKET \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE";
+    const selectClause = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE";
     const orderClause = "ORDER BY TICKET DESC";
     var whereClause = ' MON IN (\"' + mon.join("\",\"") + '\")';
     const sql = selectClause + whereClause + orderClause;
@@ -147,19 +147,19 @@ const exportMonthRange = (mon, callback) => {
 };
 
 const searchTicket = (ticket, callback) => {
-    const sql = "SELECT * FROM tickets where TICKET = ?";
+    const sql = "SELECT * FROM tickets where TICKET_NEW = ?";
 
     database.appDatabase.get(sql, [ticket], (err, row) => {
         if (err) {
             callback(err.message);
         }
-        
+
         callback(row);
     });
 };
 
 const getData = (mon, callback) => {
-    const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+    const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET_NEW DESC";
 
     database.appDatabase.all(sql, [mon], (err, rows) => {
         if (err) {
@@ -183,7 +183,7 @@ const getDataByCategory = (mon, callback) => {
 };
 
 const getAllData = (callback) => {
-    const sql = "SELECT * FROM tickets ORDER BY TICKET DESC";
+    const sql = "SELECT * FROM tickets ORDER BY TICKET_NEW DESC";
 
     database.appDatabase.all(sql, [], (err, rows) => {
         if (err) {
@@ -199,7 +199,7 @@ const incidentCount = (month, callback) => {
 
     database.appDatabase.all(sql, [month], (err, result) => {
         if (err) {
-            callback (err.message);
+            callback(err.message);
         }
 
         callback(result)
@@ -211,7 +211,7 @@ const requestCount = (month, callback) => {
 
     database.appDatabase.all(sql, [month], (err, result) => {
         if (err) {
-            callback (err.message);
+            callback(err.message);
         }
 
         callback(result)

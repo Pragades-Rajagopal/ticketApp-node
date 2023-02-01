@@ -1,43 +1,51 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png"  href="/public/favicon/ticket64.png">
-    <title><%= title %></title>
+    <link rel="icon" type="image/png" href="/public/favicon/ticket64.png">
+    <title>
+        <%= title %>
+    </title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom.css">
     <link rel="stylesheet" href="/public/css/table.css">
     <script type="text/javascript" charset="utf8" src="/public/scripts/jquery.js"></script>
     <script type="text/javascript" charset="utf8" src="/public/scripts/datatable.js"></script>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-exp fixed-top">
         <div class="container">
             <a accesskey="0" class="app-logo" href="/ticket-tool">
-                <img src="/public/favicon/ticket64.png" width="22" height="20" style="margin-bottom: 2px;><!-- fix for prod style="margin-bottom: 2px; -->
+                <img src="/public/favicon/ticket64.png" width="22" height="20"
+                    style="margin-bottom: 2px;><!-- fix for prod style=" margin-bottom: 2px; -->
             </a>
             <a class="navbar-brand" href="/ticket-tool">TICKET TOOL</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse me-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                     <li class="nav-item">
                         <a accesskey="1" class="nav-link nav-val btn-hover" href="/ticket-tool/export-data">EXPORT</a>
-                    </li> 
-                </ul>                
+                    </li>
+                </ul>
                 <form id="viewmonth" class="wrap-ctn" action="/ticket-tool/viewdata" method="post">
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                         <li class="nav-item">
                             <select class="btn-sm dd-sm" id="viewmonth" name="viewMONTH">
                                 <% MONTH.forEach((MONTH)=>{%>
-                                    <option value=<%= MONTH.MON%>>
-                                        <%= MONTH.MON %></option>
+                                    <option value=<%=MONTH.MON%>>
+                                        <%= MONTH.MON %>
+                                    </option>
                                     <%})%>
-                                    <option value='-' disabled>―――――</option>
-                                    <option value="All">All Months</option>
+                                        <option value='-' disabled>―――――</option>
+                                        <option value="All">All Months</option>
                             </select>
                         </li>
                         <li class="nav-item">
@@ -47,11 +55,10 @@
                 </form>
                 &emsp;
                 <form id="search" action="/ticket-tool/search" method="post">
-                    <input class="searchbox-col" type="number" name="ticketnum" placeholder="enter ticket to search">
+                    <input class="searchbox-col" type="text" name="ticketnum" placeholder="enter ticket to search">
                 </form>
                 <a accesskey="4" class="nav-link" href="/ticket-tool/config"><span class="gear">&#9776;</span></a>
             </div>
         </div>
     </nav>
-<br><br>
-    
+    <br><br>
