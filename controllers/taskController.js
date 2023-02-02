@@ -90,7 +90,7 @@ function index_page_post(req, res) {
         }
 
         taskModel.insertTicket(TICKET, DESCR, CATEGORY, COMMENT, USER, APP, timeGMT, MON, (result) => {
-            console.log("Insert ticket --", result);
+            // console.log("Insert ticket --", result);
             let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Ticket "${TICKET}" logged in the application with data: ["${DESCR}", "${CATEGORY}", "${COMMENT}", "${USER}"]`);
 
