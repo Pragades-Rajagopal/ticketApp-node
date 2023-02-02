@@ -3,10 +3,23 @@ const database = require('../database/database');
 // const fs = require('fs');
 // const path = require('path');
 
+const getTicketnumberInt = (callback) => {
+    const sql = "SELECT MAX(TICKET) AS TICKET FROM tickets";
+    database.appDatabase.all(sql, [], (err, row) => {
+        if (err) { callback(err) }
+        let value;
+        value = Number(row[0].TICKET) + 1
+        callback(value)
+    })
+};
+
+
 const insertTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, callback) => {
     const sql = "INSERT INTO tickets (TICKET_NEW, RESOLUTION, TICKET_TYPE, COMMENT, RESOLVED_BY, APP_NM, CREATED_ON, MON, TICKET) VALUES (?,?,?,?,?,?,?,?,?)";
-
-    database.appDatabase.run(sql, [TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, 0], (err) => {
+    // Fix for snow migration
+    let ticketInt;
+    getTicketnumberInt((callback) => { ticketInt = callback });
+    database.appDatabase.run(sql, [TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, ticketInt], (err) => {
         if (err) {
             callback(err.message);
         }
