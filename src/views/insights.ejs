@@ -1,5 +1,5 @@
 <head>
-    <link rel="icon" type="image/png"  href="/public/favicon/ticket64.png">
+    <link rel="icon" type="image/png" href="/public/favicon/ticket64.png">
     <title>Ticket Tool - Insights</title>
     <link rel="stylesheet" href="/public/css/bootstrap.css">
     <link rel="stylesheet" href="/public/css/custom.css">
@@ -11,50 +11,64 @@
     <a class="navbar-brand" href="/ticket-tool">Home</a>
     <br>
     <h3>insights</h3>
-    <p>Ticket tool is designed using Node.js, Express and SQLite database. This application is designed based on MVC architectural pattern (Model, View and Controller components).</p>
+    <p>Ticket tool is designed using Node.js, Express and SQLite database. This application is designed based on MVC
+        architectural pattern (Model, View and Controller components).</p>
     <p>Controller is the bridge between Model and View components.</p>
     <p>
-        <li><b>Model</b> : This component handles data logic. In our case all the database connections and operations are handled.</li>
+        <li><b>Model</b> : This component handles data logic. In our case all the database connections and operations
+            are handled.</li>
         <li><b>View</b> : This component displays the information from the model to the user.</li>
-        <li><b>Controller</b> : This component controls the data flow into a model object and updates the view whenever data changes or routed to another page.</li>
+        <li><b>Controller</b> : This component controls the data flow into a model object and updates the view whenever
+            data changes or routed to another page.</li>
         <li><b>Router</b> : This component routes to different pages based on user operations.</li>
     </p>
-    <p>Application is hosted in <b><i>Dev application server</i></b> by running it as a service "<b><i>tt_tool</i></b>". Port in&out 9191 is opened to serve to the end user. <br>Link: <a href="/ticket-tool">Ticket tool</a></p>
+    <p>Application is hosted in <b><i>Dev application server</i></b> by running it as a service "<b><i>tt_tool</i></b>".
+        Port in&out 9191 is opened to serve to the end user. <br>Link: <a href="/ticket-tool">Ticket tool</a></p>
     <br>
     <h4>Debugging steps</h4>
     <p>
-        <li><b>Application is not reachable (with VPN connected)</b>, open the development server and try accessing the application as localhost <a href="http://localhost:9191/ticket-tool">http://localhost:9191/ticket-tool</a></li>
-        <ul>
-            <li>If the application is reachable in localhost, check if the port <i>dev:serve:9191</i> is working in inbound and outbound rules.</li>
-            <li>If not working in localhost, check for the service <i>tt_tool</i> and it should be running. (<b>after every patching activity in the dev server, service needs to be started manually!</b>)</li>
-        </ul>
-        <li><b>CSV download operations is not working</b>, check in <i>./public/exports</i> directory (for EXPORT ALL) if a new file is created in this directory after clicking on EXPORT links.</li>
-        <ul>
-            <li>Need to debug <i><u>exportAllCSV()</u> function</i> for EXPORT ALL and <i><u>exportPrevMon()</u> function</i> for EXPORT FOR X month</li>
-            <li>Check if the data is fetched from the respective function in Model / proper arguments are passed in the above functions</li>
-        </ul>
-        <li><b>Resolution is not added/deleted from the CONFIG page</b>, debug <i><u>newResolution_put()</u> function</i> for insert & update operations and <i><u>deleteResolution()</u> function</i> for delete operation</li>
-        <br>
-        <li><b>Database operation issue</b>, check for the respective function in Model</li>
-        <ul>
-            <li>Data handshake between the Controller and Model might have corrupted due to some logic issue</li>
-            <li>Check if the database connection is established by debugging <i>database/database.js</i> file by enabling logs</li>
-            <li>Another issue might be due table lock created by multiple user operations</li>
-            <li><b>Move data.sqlite3 file to other directory and place it back</b> (this will remove session locks created by some main stream operations)</li>
-            <li><b>Restart the service finally!</b></li>
-        </ul>
+        <li><b>Application is not reachable (with VPN connected)</b>, open the development server and try accessing the
+            application as localhost <a href="http://localhost:9191/ticket-tool">http://localhost:9191/ticket-tool</a>
+        </li>
+    <ul>
+        <li>If the application is reachable in localhost, check if the port <i>dev:serve:9191</i> is working in inbound
+            and outbound rules.</li>
+        <li>If not working in localhost, check for the service <i>tt_tool</i> and it should be running. (<b>after every
+                patching activity in the dev server, service needs to be started manually!</b>)</li>
+    </ul>
+    <li><b>CSV download operations is not working</b>, check in <i>./public/exports</i> directory (for EXPORT ALL) if a
+        new file is created in this directory after clicking on EXPORT links.</li>
+    <ul>
+        <li>Need to debug <i><u>exportAllCSV()</u> function</i> for EXPORT ALL and <i><u>exportPrevMon()</u>
+                function</i> for EXPORT FOR X month</li>
+        <li>Check if the data is fetched from the respective function in Model / proper arguments are passed in the
+            above functions</li>
+    </ul>
+    <li><b>Resolution is not added/deleted from the CONFIG page</b>, debug <i><u>newResolution_put()</u> function</i>
+        for insert & update operations and <i><u>deleteResolution()</u> function</i> for delete operation</li>
+    <br>
+    <li><b>Database operation issue</b>, check for the respective function in Model</li>
+    <ul>
+        <li>Data handshake between the Controller and Model might have corrupted due to some logic issue</li>
+        <li>Check if the database connection is established by debugging <i>database/database.js</i> file by enabling
+            logs</li>
+        <li>Another issue might be due table lock created by multiple user operations</li>
+        <li><b>Move data.sqlite3 file to other directory and place it back</b> (this will remove session locks created
+            by some main stream operations)</li>
+        <li><b>Restart the service finally!</b></li>
+    </ul>
     </p>
     <br>
     <h4>Housekeeping activities</h4>
     <p>
-        <li>CSV exports will create files in <i>./public/exports</i> directory and accumulate over time. All the files can be deleted periodically (expected less than 100MB/year)</li>
+        <li>CSV exports will create files in <i>./public/exports</i> directory and accumulate over time. All the files
+            can be deleted periodically (expected less than 100MB/year)</li>
         <li>Log files will be generated in <i>./logs</i> directory and can be deleted periodically</li>
     </p>
     <br><br>
     <footer>
-        <p class="para-hl">v1.4 Minor code & UI changes <a class="para-hl-link" href="/ticket-tool/v/changelogs">View Changelogs</a></p>
+        <p class="para-hl">v2.1 Major changes & Folder reorganization <a class="para-hl-link"
+                href="/ticket-tool/v/changelogs">View Changelogs</a></p>
         <p>&copy; MMXXII - For internal use only!</p>
     </footer>
 </div>
-
-
