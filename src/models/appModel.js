@@ -1,4 +1,4 @@
-const database = require('../database/database');
+const database = require('../connector/database');
 // const csv = require('csv-parser');
 // const fs = require('fs');
 // const path = require('path');

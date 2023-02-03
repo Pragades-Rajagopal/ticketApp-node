@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const taskRoutes = require('./routes/taskRoutes');
+const taskRoutes = require('./routes/appRoutes');
 const moment = require('moment');
 require('./utils/writetoLogs');
 const logfilePath = require('./utils/createLogfile');

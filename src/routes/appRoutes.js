@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController');
-const taskValidator = require('../validation/taskValidator');
+const taskController = require('../controllers/appController');
+const taskValidator = require('../validation/validator');
 
 router.get('/ticket-tool', taskController.index_page_get);
 router.post('/ticket-tool', taskValidator.validateTask, taskController.index_page_post);

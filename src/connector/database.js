@@ -9,13 +9,13 @@ let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
 const logfileName = logfilePath.filePath;
 console.file(logfileName);
 
-const db_path = path.resolve(__dirname, '../database', 'data.sqlite3');
+const db_path = path.resolve(__dirname, '../../database', 'data.sqlite3');
 
 const appDatabase = new sqlite3.Database(db_path, sqlite3.OPEN_READWRITE, err => {
-    if (err) { 
-        console.log(`[${timestamp}]: Issue while connecting to database. Investigation required!`); 
+    if (err) {
+        console.log(`[${timestamp}]: Issue while connecting to database. Investigation required!`);
     }
-    console.log(`[${timestamp}]: Application connected to database in path: ${db_path}`); 
+    console.log(`[${timestamp}]: Application connected to database in path: ${db_path}`);
 });
 
 module.exports = { appDatabase };

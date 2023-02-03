@@ -1,4 +1,4 @@
-const taskModel = require('../models/taskModels');
+const taskModel = require('../models/appModel');
 const { validationResult } = require('express-validator');
 const moment = require('moment');
 const path = require('path');
@@ -6,7 +6,7 @@ const fs = require('fs');
 const fastcsv = require('fast-csv');
 require('../utils/writetoLogs');
 const logfilePath = require('../utils/createLogfile');
-const conf = require('./configuration')
+const conf = require('../config/configuration')
 
 const logfileName = logfilePath.filePath;
 console.file(logfileName);

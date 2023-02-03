@@ -1,0 +1,45 @@
+[2023/02/03 06:03:07]: Application is running in port: 9191
+[2023/02/03 06:03:06]: Application connected to database in path: /workspaces/ticketApp-node/database/data.sqlite3
+[2023/02/03 06:03:23]: Exported data for month: [Feb2023]
+BadRequestError: request aborted
+    at IncomingMessage.onAborted (/workspaces/ticketApp-node/node_modules/raw-body/index.js:238:10)
+    at IncomingMessage.emit (node:events:512:28)
+    at IncomingMessage._destroy (node:_http_incoming:224:10)
+    at _destroy (node:internal/streams/destroy:109:10)
+    at IncomingMessage.destroy (node:internal/streams/destroy:71:5)
+    at abortIncoming (node:_http_server:750:9)
+    at socketOnClose (node:_http_server:744:3)
+    at Socket.emit (node:events:524:35)
+    at TCP.<anonymous> (node:net:316:12)
+[2023/02/03 06:03:44]: Viewed ticket details for month: [Feb2023]
+BadRequestError: request aborted
+    at IncomingMessage.onAborted (/workspaces/ticketApp-node/node_modules/raw-body/index.js:238:10)
+    at IncomingMessage.emit (node:events:512:28)
+    at IncomingMessage._destroy (node:_http_incoming:224:10)
+    at _destroy (node:internal/streams/destroy:109:10)
+    at IncomingMessage.destroy (node:internal/streams/destroy:71:5)
+    at abortIncoming (node:_http_server:750:9)
+    at socketOnClose (node:_http_server:744:3)
+    at Socket.emit (node:events:524:35)
+    at TCP.<anonymous> (node:net:316:12)
+[2023/02/03 06:04:16]: Ticket "TEST10034154" was searched in the application
+BadRequestError: request aborted
+    at IncomingMessage.onAborted (/workspaces/ticketApp-node/node_modules/raw-body/index.js:238:10)
+    at IncomingMessage.emit (node:events:512:28)
+    at IncomingMessage._destroy (node:_http_incoming:224:10)
+    at _destroy (node:internal/streams/destroy:109:10)
+    at IncomingMessage.destroy (node:internal/streams/destroy:71:5)
+    at abortIncoming (node:_http_server:750:9)
+    at socketOnClose (node:_http_server:744:3)
+    at Socket.emit (node:events:524:35)
+    at TCP.<anonymous> (node:net:316:12)
+[2023/02/03 06:04:56]: Ticket "TEST10034154" was updated with data: ["Cancellation Date for Voice Orders", "Service Request","NA"]
+[2023/02/03 06:05:06]: Ticket "TEST10034154" was searched in the application
+[2023/02/03 06:05:07]: Viewed ticket details for month: [Feb2023]
+[2023/02/03 06:05:11]: Viewed ticket details by category for month: [Feb2023]
+[2023/02/03 06:05:37]: New resolution was configured ["REACT Test", "NA", "Service Request"]
+[2023/02/03 06:05:40]: Resolutions page was viewed
+[2023/02/03 06:06:39]: Resolutions page was viewed
+[2023/02/03 06:06:50]: Resolutions page was viewed
+[2023/02/03 06:07:14]: Resolution ["REACT Test"] was updated ["Testing", "Service Request"]
+[2023/02/03 06:07:29]: Resolution ["REACT Test"] was deleted

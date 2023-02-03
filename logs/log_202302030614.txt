@@ -1,0 +1,2 @@
+[2023/02/03 06:14:04]: Application is running in port: 9191
+[2023/02/03 06:14:04]: Application connected to database in path: /workspaces/ticketApp-node/database/data.sqlite3
