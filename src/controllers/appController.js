@@ -6,7 +6,8 @@ const fs = require('fs');
 const fastcsv = require('fast-csv');
 require('../utils/writetoLogs');
 const logfilePath = require('../utils/createLogfile');
-const conf = require('../config/configuration')
+const conf = require('../config/configuration');
+const { exportDirLink, exportFilePath } = require('../config/ioconfig');
 
 const logfileName = logfilePath.filePath;
 console.file(logfileName);
@@ -263,10 +264,10 @@ function exportAllCSV(req, res) {
     taskModel.exportAllCSV((result) => {
         // console.log(result);
 
-        const filePath = path.resolve(__dirname, '../', 'public', 'exports');
+        const filePath = exportFilePath;
         let time = moment.utc().format('YYYYMMDDhhmmss');
         const filename = 'ticketAll_' + time + '.csv';
-        const endPath = filePath + '\\' + filename;
+        const endPath = filePath + exportDirLink + filename;
         // console.log(endPath);
 
         var ws = fs.createWriteStream(endPath);
@@ -305,10 +306,10 @@ function exportSelectedMonth(req, res) {
     taskModel.exportMonth(MON, (result) => {
         // console.log(result);
 
-        const filePath = path.resolve(__dirname, '../', 'public', 'exports');
+        const filePath = exportFilePath;
         let time = moment.utc().format('YYYYMMDDhhmmss');
         const filename = 'ticket_' + MON + '_' + time + '.csv';
-        const endPath = filePath + '\\' + filename;
+        const endPath = filePath + exportDirLink + filename;
         // console.log(endPath);
 
         var ws = fs.createWriteStream(endPath);
@@ -393,10 +394,10 @@ function exportForRange(req, res) {
 
             taskModel.exportMonthRange(monthRange, (output) => {
 
-                const filePath = path.resolve(__dirname, '../', 'public', 'exports');
+                const filePath = exportFilePath;
                 let time = moment.utc().format('YYYYMMDDhhmmss');
                 const filename = 'ticket_rng_' + time + '.csv';
-                const endPath = filePath + '\\' + filename;
+                const endPath = filePath + exportDirLink + filename;
                 // console.log(endPath);
 
                 var ws = fs.createWriteStream(endPath);
