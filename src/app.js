@@ -1,5 +1,7 @@
-const express = require('express');
 const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+
+const express = require('express');
 const bodyParser = require('body-parser');
 const appRoutes = require('./routes/appRoutes');
 const moment = require('moment');
@@ -9,7 +11,7 @@ const logfilePath = require('./utils/createLogfile');
 const logfileName = logfilePath.filePath;
 console.file(logfileName);
 
-const port = 9191;
+const PORT = process.env.PORT;
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -28,7 +30,7 @@ app.use(appRoutes);
 
 let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
 
-app.listen(port, () => {
-    console.log(`[${timestamp}]: Application is running in port: ${port}`);
+app.listen(PORT, () => {
+    console.log(`[${timestamp}]: Application is running in port: ${PORT}`);
 });
 

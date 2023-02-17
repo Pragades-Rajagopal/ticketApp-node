@@ -21,7 +21,8 @@ router.post('/ticket-tool/config/delete', appValidator.deleteResolution, appCont
 router.get('/ticket-tool/export-data', appController.getExportPage);
 router.post('/ticket-tool/export-data', appController.exportForRange);
 
-router.get('/', appController.appRedirect)
+router.get('/', appController.appRedirect);
+router.get('/ticket-tool/api-documentation/redirect', appController.apiredirect);
 
 module.exports = router;
 

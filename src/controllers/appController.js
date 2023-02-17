@@ -1,7 +1,9 @@
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
+
 const appModel = require('../models/appModel');
 const { validationResult } = require('express-validator');
 const moment = require('moment');
-const path = require('path');
 const fs = require('fs');
 const fastcsv = require('fast-csv');
 require('../utils/writetoLogs');
@@ -546,6 +548,8 @@ function changelog_page(req, res) {
     res.render('changelogs');
 };
 
+const getTime = () => moment.utc().format('YYYY/MM/DD hh:mm:ss');
+
 
 module.exports = {
     index_page_get,
@@ -568,7 +572,12 @@ module.exports = {
 
     // get '/' will redirect to tool
     appRedirect: (request, response) => {
-        response.redirect('/ticket-tool');
+        return response.redirect('/ticket-tool');
+    },
+
+    apiredirect: (request, response) => {
+        console.log(`[${getTime()}]: API documentation page was viewed`);
+        return response.redirect(`${process.env.API_SERVER_URL}:${process.env.API_SERVER_PORT}/api-docs`);
     }
 };
 
