@@ -28,9 +28,9 @@ app.get('/check', (req, res) => {
 
 app.use(appRoutes);
 
-let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+const getTime = () => String(moment.utc().format('YYYY/MM/DD hh:mm:ss')) + ' GMT';
 
 app.listen(PORT, () => {
-    console.log(`[${timestamp}]: Application is running in port: ${PORT}`);
+    console.log(`[${getTime()}]: Application is running in port: ${PORT}`);
 });
 

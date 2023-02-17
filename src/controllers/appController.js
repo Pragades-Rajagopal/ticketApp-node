@@ -14,6 +14,7 @@ const { exportDirLink, exportFilePath } = require('../config/ioconfig');
 const logfileName = logfilePath.filePath;
 console.file(logfileName);
 
+const getTime = () => String(moment.utc().format('YYYY/MM/DD hh:mm:ss')) + ' GMT';
 
 function index_page_get(req, res) {
 
@@ -77,8 +78,7 @@ function index_page_post(req, res) {
     appModel.searchTicket(TICKET, (result) => {
         // console.log(result);
         if (result) {
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Ticket "${TICKET}" already exists and action failed to post the data. [Responsible user: ${USER}]`);
+            console.log(`[${getTime()}]: Ticket "${TICKET}" already exists and action failed to post the data. [Responsible user: ${USER}]`);
 
             const actionmsg = `Ticket "${TICKET}" was already categorized under "${result.RESOLUTION}" by "${result.RESOLVED_BY}"`;
 
@@ -94,8 +94,7 @@ function index_page_post(req, res) {
 
         appModel.insertTicket(TICKET, DESCR, CATEGORY, COMMENT, USER, APP, timeGMT, MON, (result) => {
             // console.log("Insert ticket --", result);
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Ticket "${TICKET}" logged in the application with data: ["${DESCR}", "${CATEGORY}", "${COMMENT}", "${USER}"]`);
+            console.log(`[${getTime()}]: Ticket "${TICKET}" logged in the application with data: ["${DESCR}", "${CATEGORY}", "${COMMENT}", "${USER}"]`);
 
             res.locals.title = "Ticket Tool";
             res.redirect('/ticket-tool');
@@ -125,8 +124,7 @@ function search_ticket(req, res) {
     appModel.searchTicket(ticket, (result) => {
         // console.log(result);
         if (!result) {
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Ticket "${ticket}" was searched and not available in the application`);
+            console.log(`[${getTime()}]: Ticket "${ticket}" was searched and not available in the application`);
 
             const actionmsg = `Ticket "${ticket}" does not exist!`;
 
@@ -142,8 +140,7 @@ function search_ticket(req, res) {
 
         appModel.ticketCategory((resolution) => {
             appModel.getMonths((month) => {
-                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                console.log(`[${timestamp}]: Ticket "${ticket}" was searched in the application`);
+                console.log(`[${getTime()}]: Ticket "${ticket}" was searched in the application`);
 
                 res.locals.title = "Ticket Tool - Search";
                 res.render('search', { resolution: resolution, result: result, MONTH: month, errors: {}, actionmsg: null });
@@ -184,8 +181,7 @@ function search_page_update(req, res) {
             appModel.ticketCategory((resolution) => {
 
                 appModel.getMonths((month) => {
-                    let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                    console.log(`[${timestamp}]: Ticket "${TICKET}" was updated with data: ["${DESCR}", "${CATEGORY}","${COMMENT}"]`);
+                    console.log(`[${getTime()}]: Ticket "${TICKET}" was updated with data: ["${DESCR}", "${CATEGORY}","${COMMENT}"]`);
                     const actionmsg = "Ticket detail updated successfully!"
                     res.locals.title = "Ticket Tool - Search";
                     res.render('search', { resolution: resolution, result: value, MONTH: month, errors: {}, actionmsg: actionmsg });
@@ -207,8 +203,7 @@ function getTicketData(req, res) {
     if (MON === 'All') {
         appModel.getAllData((result) => {
             appModel.getMonths((month) => {
-                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                console.log(`[${timestamp}]: Viewed ticket details for all months`);
+                console.log(`[${getTime()}]: Viewed ticket details for all months`);
 
                 res.locals.title = "Ticket Tool - View all data";
                 res.render('viewdata', { result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {} });
@@ -222,8 +217,7 @@ function getTicketData(req, res) {
         appModel.getMonths((month) => {
             appModel.incidentCount(MON, (i_count) => {
                 appModel.requestCount(MON, (r_count) => {
-                    let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                    console.log(`[${timestamp}]: Viewed ticket details for month: [${MON}]`);
+                    console.log(`[${getTime()}]: Viewed ticket details for month: [${MON}]`);
 
                     res.locals.title = `Ticket Tool - View data for ${MON}`;
                     res.render('viewdata', { result: result, MONTH: month, MON: MON, i_count: i_count, r_count: r_count });
@@ -240,8 +234,7 @@ function getTicketDataByCategory(req, res) {
             res.locals.title = "Ticket Tool - View by Category";
             res.render('viewdataByCat', { MONTH: month, MON: monthForCat, result: result });
 
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Viewed ticket details by category for month: [${monthForCat}]`);
+            console.log(`[${getTime()}]: Viewed ticket details by category for month: [${monthForCat}]`);
         });
     })
 }
@@ -252,8 +245,7 @@ function getTicketDataAll(req, res) {
 
     appModel.getAllData((result) => {
         appModel.getMonths((month) => {
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Viewed ticket details for all months`);
+            console.log(`[${getTime()}]: Viewed ticket details for all months`);
 
             res.locals.title = "Ticket Tool - View all data";
             res.render('viewdata', { result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {} });
@@ -296,8 +288,7 @@ function exportAllCSV(req, res) {
             })
             .pipe(ws);
 
-        let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-        console.log(`[${timestamp}]: Exported data for all months`);
+        console.log(`[${getTime()}]: Exported data for all months`);
     });
 };
 
@@ -338,8 +329,7 @@ function exportSelectedMonth(req, res) {
             })
             .pipe(ws);
 
-        let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-        console.log(`[${timestamp}]: Exported data for month: [${MON}]`);
+        console.log(`[${getTime()}]: Exported data for month: [${MON}]`);
     });
 };
 
@@ -416,8 +406,7 @@ function exportForRange(req, res) {
                     .pipe(ws);
             });
 
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Exported data for month range: [${monthRange}]`);
+            console.log(`[${getTime()}]: Exported data for month range: [${monthRange}]`);
         }
     });
 }
@@ -463,15 +452,13 @@ function newResolution_put(req, res) {
     appModel.searchResolution(resolution, (result) => {
         if (result.length === 0) {
             appModel.putResolution('INSERT', resolution, comment, category, (data) => {
-                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                console.log(`[${timestamp}]: New resolution was configured ["${resolution}", "${comment}", "${category}"]`);
+                console.log(`[${getTime()}]: New resolution was configured ["${resolution}", "${comment}", "${category}"]`);
                 return;
             });
         }
         else {
             appModel.putResolution('UPDATE', resolution, comment, category, (data1) => {
-                let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-                console.log(`[${timestamp}]: Resolution ["${resolution}"] was updated ["${comment}", "${category}"]`);
+                console.log(`[${getTime()}]: Resolution ["${resolution}"] was updated ["${comment}", "${category}"]`);
             });
         }
     });
@@ -522,8 +509,7 @@ function deleteResolution(req, res) {
                     res.render('config', { MONTH: month, resolution: resolution, errors: {}, actionmsg: actionmsg });
                 });
             });
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-            console.log(`[${timestamp}]: Resolution ["${resolution}"] was deleted`);
+            console.log(`[${getTime()}]: Resolution ["${resolution}"] was deleted`);
         });
     });
 };
@@ -536,8 +522,7 @@ function getResolutions(req, res) {
             res.render('allresolutions', { MONTH: month, result: result });
         })
     });
-    let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-    console.log(`[${timestamp}]: Resolutions page was viewed`);
+    console.log(`[${getTime()}]: Resolutions page was viewed`);
 }
 
 function insight_page(req, res) {
@@ -547,9 +532,6 @@ function insight_page(req, res) {
 function changelog_page(req, res) {
     res.render('changelogs');
 };
-
-const getTime = () => moment.utc().format('YYYY/MM/DD hh:mm:ss');
-
 
 module.exports = {
     index_page_get,
