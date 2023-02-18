@@ -51,6 +51,19 @@ const ticketCategory = (callback) => {
     });
 };
 
+const ticketCategoryNew = () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM resolutions";
+
+        database.appDatabase.all(sql, [], (err, rows) => {
+            if (err) {
+                reject('ticketCategory function: Error while fetching data!')
+            }
+            resolve(rows);
+        });
+    });
+};
+
 const searchResolution = (resol, callback) => {
     const sql = "SELECT * FROM resolutions WHERE CATEGORY = ?";
 
@@ -116,6 +129,19 @@ const getMonths = (callback) => {
             callback(err.message);
         }
         callback(row);
+    });
+};
+
+const getMonthsNew = () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC LIMIT 12";
+
+        database.appDatabase.all(sql, [], (err, row) => {
+            if (err) {
+                reject('getMonths function: Error while fetching data!');
+            }
+            resolve(row);
+        });
     });
 };
 
@@ -236,12 +262,14 @@ const requestCount = (month, callback) => {
 module.exports = {
     insertTicket,
     ticketCategory,
+    ticketCategoryNew,
     exportAllCSV,
     searchTicket,
     exportMonth,
     getData,
     updateTicket,
     getMonths,
+    getMonthsNew,
     incidentCount,
     requestCount,
     getAllData,

@@ -16,16 +16,17 @@ console.file(logfileName);
 
 const getTime = () => String(moment.utc().format('YYYY/MM/DD hh:mm:ss')) + ' GMT';
 
-function index_page_get(req, res) {
+async function index_page_get(req, res) {
 
-    appModel.ticketCategory((resolution) => {
-        appModel.getMonths((month) => {
-            res.locals.title = "Ticket Tool";
-            res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: null, filename: null });
-        });
+    try {
+        const resolution = await appModel.ticketCategoryNew();
+        const month = await appModel.getMonthsNew();
 
-    });
-
+        res.locals.title = "Ticket Tool";
+        res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: null, filename: null });
+    } catch (error) {
+        console.log(`[${getTime()}]: ${error}`);
+    }
 };
 
 function index_page_post(req, res) {
