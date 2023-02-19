@@ -25,239 +25,232 @@ async function index_page_get(req, res) {
         res.locals.title = "Ticket Tool";
         res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: null, filename: null });
     } catch (error) {
-        console.log(`[${getTime()}]: ${error}`);
+        console.log(`[${getTime()}]: controller:index_page_post function | error: ${error}`);
     }
 };
 
-function index_page_post(req, res) {
+async function index_page_post(req, res) {
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
 
-        appModel.ticketCategory((resolution) => {
-            // console.log(resolution)
-            appModel.getMonths((month) => {
-                res.locals.title = "Ticket Tool";
-                res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, MONTH: month, errors: errors.mapped(), actionmsg: null, filename: null });
-            });
+            const resolution = await appModel.ticketCategoryNew();
+            const month = await appModel.getMonthsNew();
 
-        });
-        return;
-    }
+            res.locals.title = "Ticket Tool";
+            res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, MONTH: month, errors: errors.mapped(), actionmsg: null, filename: null });
+            return;
+        }
 
-    const TICKET = req.body.Ticket;
-    const DESCR = req.body.DESCR;
-    const CATEGORY = req.body.CATEGORY;
-    const COMMENT = req.body.COMMENT;
-    const USER = req.body.USER;
-    const APP = req.body.APP;
-    let timeGMT = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-    let MON = moment.utc().format('MMMYYYY');
+        let postdata = {
+            TICKET: req.body.Ticket,
+            DESCR: req.body.DESCR,
+            CATEGORY: req.body.CATEGORY,
+            COMMENT: req.body.COMMENT,
+            USER: req.body.USER,
+            APP: req.body.APP,
+            CREATED_ON: moment.utc().format('YYYY/MM/DD hh:mm:ss'),
+            MON: moment.utc().format('MMMYYYY'),
+        }
 
-    /*
-    // To check if the ticket no. contains any character or special characters
-    const xpressn = /^[0-9]+$/;
-    const checkValue = xpressn.test(TICKET);
-
-    if (checkValue === false) {
-        const actionmsg = "Ticket number contains (special) characters!";
-
-        let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
-        console.log(`[${timestamp}]: Ticket "${TICKET}" contains character and action failed to post the data. [Responsible user: ${USER}]`);
-
-        res.locals.title = "Ticket Tool";
-        appModel.ticketCategory((resolution) => {
-            appModel.getMonths((month) => {
-                res.locals.title = "Ticket Tool";
-                res.render('index', {resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors:{}, MONTH: month, actionmsg: actionmsg, filename: null});
-            });
-        });
-        return;
-    }
-    */
-
-    appModel.searchTicket(TICKET, (result) => {
-        // console.log(result);
-        if (result) {
-            console.log(`[${getTime()}]: Ticket "${TICKET}" already exists and action failed to post the data. [Responsible user: ${USER}]`);
-
-            const actionmsg = `Ticket "${TICKET}" was already categorized under "${result.RESOLUTION}" by "${result.RESOLVED_BY}"`;
-
+        /*
+        // To check if the ticket no. contains any character or special characters
+        const xpressn = /^[0-9]+$/;
+        const checkValue = xpressn.test(TICKET);
+    
+        if (checkValue === false) {
+            const actionmsg = "Ticket number contains (special) characters!";
+    
+            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+            console.log(`[${timestamp}]: Ticket "${TICKET}" contains character and action failed to post the data. [Responsible user: ${USER}]`);
+    
             res.locals.title = "Ticket Tool";
             appModel.ticketCategory((resolution) => {
                 appModel.getMonths((month) => {
                     res.locals.title = "Ticket Tool";
-                    res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: actionmsg, filename: null });
+                    res.render('index', {resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors:{}, MONTH: month, actionmsg: actionmsg, filename: null});
                 });
             });
             return;
         }
+        */
 
-        appModel.insertTicket(TICKET, DESCR, CATEGORY, COMMENT, USER, APP, timeGMT, MON, (result) => {
-            // console.log("Insert ticket --", result);
-            console.log(`[${getTime()}]: Ticket "${TICKET}" logged in the application with data: ["${DESCR}", "${CATEGORY}", "${COMMENT}", "${USER}"]`);
+        const searchResult = await appModel.searchTicket(postdata.TICKET);
+
+        if (searchResult) {
+            console.log(`[${getTime()}]: Ticket "${postdata.TICKET}" already exists and action failed to post the data. [Responsible user: ${postdata.USER}]`);
+
+            const actionmsg = `Ticket "${postdata.TICKET}" was already categorized under "${searchResult.RESOLUTION}" by "${searchResult.RESOLVED_BY}"`;
+
+            const resolution = await appModel.ticketCategoryNew();
+            const month = await appModel.getMonthsNew();
 
             res.locals.title = "Ticket Tool";
-            res.redirect('/ticket-tool');
-        });
-    });
+            res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: actionmsg, filename: null });
+            return;
+        }
+
+        const insertData = await appModel.insertTicket(postdata);
+        // console.log("Insert ticket --", result);
+        console.log(`[${getTime()}]: Ticket "${postdata.TICKET}" logged in the application with data: ["${postdata.DESCR}", "${postdata.CATEGORY}", "${postdata.COMMENT}", "${postdata.USER}"] {${insertData}}`);
+
+        res.locals.title = "Ticket Tool";
+        res.redirect('/ticket-tool');
+
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:index_page_post function | error: ${error}`);
+    }
 };
 
-function search_ticket(req, res) {
+async function search_ticket(req, res) {
 
-    const ticket = req.body.ticketnum;
-    // to check if the ticket number is searched with null
-    const xpressn = /^\s*$/;
-    const ticketIsNull = xpressn.test(ticket);
+    try {
+        const ticket = req.body.ticketnum;
+        // to check if the ticket number is searched with null
+        const xpressn = /^\s*$/;
+        const ticketIsNull = xpressn.test(ticket);
 
-    if (ticketIsNull === true) {
-        appModel.ticketCategory((resolution) => {
-            appModel.getMonths((month) => {
-                const actionmsg = "Search with a ticket number!"
-                res.locals.title = "Ticket Tool";
-                res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, MONTH: month, errors: {}, actionmsg: actionmsg, filename: null });
+        const resolution = await appModel.ticketCategoryNew();
+        const month = await appModel.getMonthsNew();
 
-            });
-        });
-        return;
-    }
+        if (ticketIsNull === true) {
 
-    appModel.searchTicket(ticket, (result) => {
-        // console.log(result);
+            const actionmsg = "Search with a ticket number!"
+            res.locals.title = "Ticket Tool";
+            res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, MONTH: month, errors: {}, actionmsg: actionmsg, filename: null });
+            return;
+        }
+
+        const result = await appModel.searchTicket(ticket);
+
         if (!result) {
             console.log(`[${getTime()}]: Ticket "${ticket}" was searched and not available in the application`);
 
             const actionmsg = `Ticket "${ticket}" does not exist!`;
-
             res.locals.title = "Ticket Tool";
-            appModel.ticketCategory((resolution) => {
-                appModel.getMonths((month) => {
-                    res.locals.title = "Ticket Tool";
-                    res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: actionmsg, filename: null });
-                });
-            });
+            res.locals.title = "Ticket Tool";
+            res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: actionmsg, filename: null });
             return;
         }
 
-        appModel.ticketCategory((resolution) => {
-            appModel.getMonths((month) => {
-                console.log(`[${getTime()}]: Ticket "${ticket}" was searched in the application`);
+        console.log(`[${getTime()}]: Ticket "${ticket}" was searched in the application`);
 
-                res.locals.title = "Ticket Tool - Search";
-                res.render('search', { resolution: resolution, result: result, MONTH: month, errors: {}, actionmsg: null });
-            });
-        });
+        res.locals.title = "Ticket Tool - Search";
+        res.render('search', { resolution: resolution, result: result, MONTH: month, errors: {}, actionmsg: null });
 
-    });
-
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:search_ticket function | error: ${error}`);
+    }
 };
 
-function search_page_update(req, res) {
+async function search_page_update(req, res) {
 
-    const TICKET = req.body.Ticket;
+    try {
+        const updateData = {
+            TICKET: req.body.Ticket,
+            DESCR: req.body.DESCR,
+            CATEGORY: req.body.CATEGORY,
+            COMMENT: req.body.COMMENT
+        }
 
-    errors = validationResult(req);
+        const resolution = await appModel.ticketCategoryNew();
+        const month = await appModel.getMonthsNew();
 
-    if (!errors.isEmpty()) {
+        errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const value = await appModel.searchTicket(updateData.TICKET);
 
-        appModel.searchTicket(TICKET, (value) => {
-            appModel.ticketCategory((resolution) => {
-                appModel.getMonths((month) => {
-                    res.locals.title = "Ticket Tool - Search";
-                    res.render('search', { resolution: resolution, result: value, MONTH: month, errors: errors.mapped(), actionmsg: null });
-                });
-            });
-        });
-        return;
-    }
+            res.locals.title = "Ticket Tool - Search";
+            res.render('search', { resolution: resolution, result: value, MONTH: month, errors: errors.mapped(), actionmsg: null });
+            return;
+        }
 
-    const DESCR = req.body.DESCR;
-    const CATEGORY = req.body.CATEGORY;
-    const COMMENT = req.body.COMMENT;
-
-    appModel.updateTicket(TICKET, DESCR, CATEGORY, COMMENT, (result) => {
+        const result_ = await appModel.updateTicket(updateData);
+        const value_ = await appModel.searchTicket(updateData.TICKET);
         // console.log(result);
+        console.log(`[${getTime()}]: Ticket "${updateData.TICKET}" was updated with data: ["${updateData.DESCR}", "${updateData.CATEGORY}","${updateData.COMMENT}"]`);
+        const actionmsg = "Ticket detail updated successfully!"
+        res.locals.title = "Ticket Tool - Search";
+        res.render('search', { resolution: resolution, result: value_, MONTH: month, errors: {}, actionmsg: actionmsg });
 
-        appModel.searchTicket(TICKET, (value) => {
-            appModel.ticketCategory((resolution) => {
-
-                appModel.getMonths((month) => {
-                    console.log(`[${getTime()}]: Ticket "${TICKET}" was updated with data: ["${DESCR}", "${CATEGORY}","${COMMENT}"]`);
-                    const actionmsg = "Ticket detail updated successfully!"
-                    res.locals.title = "Ticket Tool - Search";
-                    res.render('search', { resolution: resolution, result: value, MONTH: month, errors: {}, actionmsg: actionmsg });
-                });
-            });
-        });
-
-    });
-
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:search_page_update function | error: ${error}`);
+    }
 };
 
 let monthForCat;
 
-function getTicketData(req, res) {
+async function getTicketData(req, res) {
 
-    const MON = req.body.viewMONTH;
-    monthForCat = MON;
+    try {
+        const MON = req.body.viewMONTH;
+        monthForCat = MON;
 
-    if (MON === 'All') {
-        appModel.getAllData((result) => {
-            appModel.getMonths((month) => {
-                console.log(`[${getTime()}]: Viewed ticket details for all months`);
+        const month = await appModel.getMonthsNew();
 
-                res.locals.title = "Ticket Tool - View all data";
-                res.render('viewdata', { result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {} });
-            });
-        });
-        return;
-    }
+        if (MON === 'All') {
+            const result = await appModel.getAllData();
 
-    appModel.getData(MON, (result) => {
-
-        appModel.getMonths((month) => {
-            appModel.incidentCount(MON, (i_count) => {
-                appModel.requestCount(MON, (r_count) => {
-                    console.log(`[${getTime()}]: Viewed ticket details for month: [${MON}]`);
-
-                    res.locals.title = `Ticket Tool - View data for ${MON}`;
-                    res.render('viewdata', { result: result, MONTH: month, MON: MON, i_count: i_count, r_count: r_count });
-                });
-            });
-        });
-    });
-};
-
-function getTicketDataByCategory(req, res) {
-
-    appModel.getDataByCategory(monthForCat, (result) => {
-        appModel.getMonths((month) => {
-            res.locals.title = "Ticket Tool - View by Category";
-            res.render('viewdataByCat', { MONTH: month, MON: monthForCat, result: result });
-
-            console.log(`[${getTime()}]: Viewed ticket details by category for month: [${monthForCat}]`);
-        });
-    })
-}
-
-// this function is obsolete and handled in getTicketData() with condition MON === "All"
-// but endpoint '/ticket-tool/view-all' is still active
-function getTicketDataAll(req, res) {
-
-    appModel.getAllData((result) => {
-        appModel.getMonths((month) => {
             console.log(`[${getTime()}]: Viewed ticket details for all months`);
 
             res.locals.title = "Ticket Tool - View all data";
             res.render('viewdata', { result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {} });
-        });
-    })
+            return;
+        }
+
+        const result = await appModel.getData(MON);
+        const i_count = await appModel.incidentCount(MON);
+        const r_count = await appModel.requestCount(MON);
+
+        console.log(`[${getTime()}]: Viewed ticket details for month: [${MON}]`);
+
+        res.locals.title = `Ticket Tool - View data for ${MON}`;
+        res.render('viewdata', { result: result, MONTH: month, MON: MON, i_count: i_count, r_count: r_count });
+
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:getTicketData function | error: ${error}`);
+    }
 };
 
-function exportAllCSV(req, res) {
+async function getTicketDataByCategory(req, res) {
 
-    appModel.exportAllCSV((result) => {
-        // console.log(result);
+    try {
+        const month = await appModel.getMonthsNew();
+        const result = await appModel.getDataByCategory(monthForCat);
+
+        res.locals.title = "Ticket Tool - View by Category";
+        res.render('viewdataByCat', { MONTH: month, MON: monthForCat, result: result });
+
+        console.log(`[${getTime()}]: Viewed ticket details by category for month: [${monthForCat}]`);
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:getTicketDataByCategory function | error: ${error}`);
+    }
+};
+
+// this function is obsolete and handled in getTicketData() with condition MON === "All"
+// but endpoint '/ticket-tool/view-all' is still active
+async function getTicketDataAll(req, res) {
+
+    try {
+        const month = await appModel.getMonthsNew();
+        const result = await appModel.getAllData();
+
+        console.log(`[${getTime()}]: Viewed ticket details for all months`);
+
+        res.locals.title = "Ticket Tool - View all data";
+        res.render('viewdata', { result: result, MONTH: month, MON: 'All Months', i_count: {}, r_count: {} });
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:getTicketDataAll function | error: ${error}`);
+    }
+};
+
+async function exportAllCSV(req, res) {
+
+    try {
+        const result = await appModel.exportAllCSV();
+        const allMonths = await appModel.getAllDistinctMonthsNew();
+        const months = await appModel.getMonthsNew();
 
         const filePath = exportFilePath;
         let time = moment.utc().format('YYYYMMDDhhmmss');
@@ -269,36 +262,38 @@ function exportAllCSV(req, res) {
         fastcsv.write(result, { headers: true })
             .on("finish", () => {
 
-                appModel.getMonths((months) => {
-                    appModel.getAllDistinctMonths((allMonths) => {
-                        // months will be pushed to below arrays and reversed in rev_month array
-                        let month = [];
-                        let rev_month = [];
-                        for (let i = 0; i < months.length; i++) {
-                            month.push(months[i]['MON']);
-                            rev_month.push(months[i]['MON']);
-                        }
-                        rev_month = rev_month.reverse();
+                // months will be pushed to below arrays and reversed in rev_month array
+                let month = [];
+                let rev_month = [];
+                for (let i = 0; i < months.length; i++) {
+                    month.push(months[i]['MON']);
+                    rev_month.push(months[i]['MON']);
+                }
+                rev_month = rev_month.reverse();
 
-                        const monthFrom = allMonths[allMonths.length - 1];
-                        const monthTo = allMonths[0];
+                const monthFrom = allMonths[allMonths.length - 1];
+                const monthTo = allMonths[0];
 
-                        res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: filename });
-                    });
-                });
+                res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: filename });
+
             })
             .pipe(ws);
 
         console.log(`[${getTime()}]: Exported data for all months`);
-    });
+
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:exportAllCSV function | error: ${error}`);
+    }
 };
 
-function exportSelectedMonth(req, res) {
+async function exportSelectedMonth(req, res) {
 
-    const MON = req.body.SELECTED_MON;
+    try {
+        const MON = req.body.SELECTED_MON;
+        const allMonths = await appModel.getAllDistinctMonthsNew();
+        const months = await appModel.getMonthsNew();
 
-    appModel.exportMonth(MON, (result) => {
-        // console.log(result);
+        const result = await appModel.exportMonth(MON);
 
         const filePath = exportFilePath;
         let time = moment.utc().format('YYYYMMDDhhmmss');
@@ -310,49 +305,50 @@ function exportSelectedMonth(req, res) {
         fastcsv.write(result, { headers: true })
             .on("finish", () => {
 
-                appModel.getMonths((months) => {
-                    appModel.getAllDistinctMonths((allMonths) => {
+                let month = [];
+                let rev_month = [];
+                for (let i = 0; i < months.length; i++) {
+                    month.push(months[i]['MON']);
+                    rev_month.push(months[i]['MON']);
+                }
+                rev_month = rev_month.reverse();
 
-                        let month = [];
-                        let rev_month = [];
-                        for (let i = 0; i < months.length; i++) {
-                            month.push(months[i]['MON']);
-                            rev_month.push(months[i]['MON']);
-                        }
-                        rev_month = rev_month.reverse();
+                const monthFrom = allMonths[allMonths.length - 1];
+                const monthTo = allMonths[0];
 
-                        const monthFrom = allMonths[allMonths.length - 1];
-                        const monthTo = allMonths[0];
+                res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: filename });
 
-                        res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: filename });
-                    });
-                });
             })
             .pipe(ws);
 
         console.log(`[${getTime()}]: Exported data for month: [${MON}]`);
-    });
+
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:exportSelectedMonth function | error: ${error}`);
+    }
 };
 
-function getExportPage(req, res) {
+async function getExportPage(req, res) {
 
-    appModel.getMonths((months) => {
-        appModel.getAllDistinctMonths((allMonths) => {
+    try {
+        const allMonths = await appModel.getAllDistinctMonthsNew();
+        const months = await appModel.getMonthsNew();
 
-            let month = [];
-            let rev_month = [];
-            for (let i = 0; i < months.length; i++) {
-                month.push(months[i]['MON']);
-                rev_month.push(months[i]['MON']);
-            }
-            rev_month = rev_month.reverse();
+        let month = [];
+        let rev_month = [];
+        for (let i = 0; i < months.length; i++) {
+            month.push(months[i]['MON']);
+            rev_month.push(months[i]['MON']);
+        }
+        rev_month = rev_month.reverse();
 
-            const monthFrom = allMonths[allMonths.length - 1];
-            const monthTo = allMonths[0];
+        const monthFrom = allMonths[allMonths.length - 1];
+        const monthTo = allMonths[0];
 
-            res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: null });
-        });
-    });
+        res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: null });
+    } catch (error) {
+        console.log(`[${getTime()}]: controller:getExportPage function | error: ${error}`);
+    }
 }
 
 function exportForRange(req, res) {

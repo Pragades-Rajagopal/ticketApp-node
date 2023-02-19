@@ -3,43 +3,69 @@ const database = require('../connector/database');
 // const fs = require('fs');
 // const path = require('path');
 
-const getTicketnumberInt = (callback) => {
-    const sql = "SELECT MAX(TICKET) AS TICKET FROM tickets";
-    database.appDatabase.all(sql, [], (err, row) => {
-        if (err) { callback(err) }
-        let value;
-        value = Number(row[0].TICKET) + 1
-        callback(value)
-    })
-};
+const getTicketnumberInt = () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT MAX(TICKET) AS TICKET FROM tickets";
 
-
-const insertTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, callback) => {
-    const sql = "INSERT INTO tickets (TICKET_NEW, RESOLUTION, TICKET_TYPE, COMMENT, RESOLVED_BY, APP_NM, CREATED_ON, MON, TICKET) VALUES (?,?,?,?,?,?,?,?,?)";
-    // Fix for snow migration
-    let ticketInt;
-    getTicketnumberInt((callback) => { ticketInt = callback });
-    database.appDatabase.run(sql, [TICKET, RESOLUTION, CATEGORY, DESCRIPTION, NAME, APP, CREATED_ON, MON, ticketInt], (err) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        const successMsg = "Ticket inserted...";
-        callback(successMsg);
+        database.appDatabase.all(sql, [], (err, row) => {
+            if (err) {
+                reject('getTicketnumberInt function: Error while fetching data!');
+            }
+            let value;
+            value = Number(row[0].TICKET) + 1
+            resolve(value)
+        })
     });
 };
 
-const updateTicket = (TICKET, RESOLUTION, CATEGORY, DESCRIPTION, callback) => {
 
-    const sql = "UPDATE tickets SET RESOLUTION = ?, TICKET_TYPE = ?, COMMENT = ? WHERE TICKET_NEW = ?";
+const insertTicket = (data) => {
+    return new Promise(async (resolve, reject) => {
+        const sql = "INSERT INTO tickets (TICKET_NEW, RESOLUTION, TICKET_TYPE, COMMENT, RESOLVED_BY, APP_NM, CREATED_ON, MON, TICKET) VALUES (?,?,?,?,?,?,?,?,?)";
 
-    database.appDatabase.run(sql, [RESOLUTION, CATEGORY, DESCRIPTION, TICKET], (err) => {
-        if (err) {
-            callback(err.message);
+        try {
+            // Fix for snow migration
+            let ticketInt = await getTicketnumberInt();
+
+            database.appDatabase.run(sql, [data.TICKET, data.DESCR, data.CATEGORY, data.COMMENT, data.USER, data.APP, data.CREATED_ON, data.MON, ticketInt], (err) => {
+                if (err) {
+                    reject('insertTicket function: Error while inserting data!');
+                }
+
+                const successMsg = `Reference ticket no. ${ticketInt}`;
+                resolve(successMsg);
+            });
+        } catch (error) {
+            reject(error)
         }
+    });
+};
 
-        const successMsg = "Ticket updated...";
-        callback(successMsg);
+const updateTicket = (data) => {
+    return new Promise((resolve, reject) => {
+        const sql = "UPDATE tickets SET RESOLUTION = ?, TICKET_TYPE = ?, COMMENT = ? WHERE TICKET_NEW = ?";
+
+        database.appDatabase.run(sql, [data.DESCR, data.CATEGORY, data.COMMENT, data.TICKET], (err) => {
+            if (err) {
+                reject('updateTicket function: Error while updating data!');
+            }
+
+            const successMsg = "Ticket updated...";
+            resolve(successMsg);
+        });
+    });
+};
+
+const searchTicket = (ticket) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM tickets where TICKET_NEW = ?";
+
+        database.appDatabase.get(sql, [ticket], (err, row) => {
+            if (err) {
+                reject("searchTicket function: Error while fetching data!");
+            }
+            resolve(row);
+        });
     });
 };
 
@@ -108,18 +134,6 @@ const delResolution = (resolution, callback) => {
     });
 };
 
-const exportAllCSV = (callback) => {
-    const sql = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets ORDER BY TICKET DESC";
-
-    database.appDatabase.all(sql, [], (err, rows) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(rows);
-    });
-};
-
 const getMonths = (callback) => {
 
     const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC LIMIT 12";
@@ -157,15 +171,42 @@ const getAllDistinctMonths = (callback) => {
     });
 };
 
-const exportMonth = (mon, callback) => {
-    const sql = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+const getAllDistinctMonthsNew = () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC";
 
-    database.appDatabase.all(sql, [mon], (err, rows) => {
-        if (err) {
-            callback(err.message);
-        }
+        database.appDatabase.all(sql, [], (err, row) => {
+            if (err) {
+                reject('getAllDistinctMonths function: Error while fetching data!');
+            }
+            resolve(row);
+        });
+    })
+};
 
-        callback(rows);
+const exportAllCSV = () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets ORDER BY TICKET DESC";
+
+        database.appDatabase.all(sql, [], (err, rows) => {
+            if (err) {
+                reject('exportAllCSV function: Error while fetching data!');
+            }
+            resolve(rows);
+        });
+    });
+};
+
+const exportMonth = (mon) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE MON = ? ORDER BY TICKET DESC";
+
+        database.appDatabase.all(sql, [mon], (err, rows) => {
+            if (err) {
+                reject('exportMonth function: Error while fetching data!');
+            }
+            resolve(rows);
+        });
     });
 };
 
@@ -185,75 +226,68 @@ const exportMonthRange = (mon, callback) => {
     });
 };
 
-const searchTicket = (ticket, callback) => {
-    const sql = "SELECT * FROM tickets where TICKET_NEW = ?";
+const getData = (mon) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET_NEW DESC";
 
-    database.appDatabase.get(sql, [ticket], (err, row) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(row);
+        database.appDatabase.all(sql, [mon], (err, rows) => {
+            if (err) {
+                reject("getData function: Error while fetching data!");
+            }
+            resolve(rows);
+        });
     });
 };
 
-const getData = (mon, callback) => {
-    const sql = "SELECT * FROM tickets WHERE MON = ? ORDER BY TICKET_NEW DESC";
+const getDataByCategory = (mon) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM TICKETS_V2 WHERE MONTH = ? ORDER BY TICKET_COUNT DESC";
 
-    database.appDatabase.all(sql, [mon], (err, rows) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(rows);
+        database.appDatabase.all(sql, [mon], (err, rows) => {
+            if (err) {
+                reject("getDataByCategory function: Error while fetching data!");
+            }
+            resolve(rows);
+        });
     });
 };
 
-const getDataByCategory = (mon, callback) => {
-    const sql = "SELECT * FROM TICKETS_V2 WHERE MONTH = ? ORDER BY TICKET_COUNT DESC";
+const getAllData = () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM tickets ORDER BY TICKET_NEW DESC";
 
-    database.appDatabase.all(sql, [mon], (err, rows) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(rows);
+        database.appDatabase.all(sql, [], (err, rows) => {
+            if (err) {
+                reject("getAllData function: Error while fetching data!");
+            }
+            resolve(rows);
+        });
     });
 };
 
-const getAllData = (callback) => {
-    const sql = "SELECT * FROM tickets ORDER BY TICKET_NEW DESC";
+const incidentCount = (month) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT TICKET FROM tickets where MON = ?  and TICKET_TYPE = 'Incident'";
 
-    database.appDatabase.all(sql, [], (err, rows) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(rows);
-    });
-};
-
-const incidentCount = (month, callback) => {
-    const sql = "SELECT TICKET FROM tickets where MON = ?  and TICKET_TYPE = 'Incident'";
-
-    database.appDatabase.all(sql, [month], (err, result) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(result)
+        database.appDatabase.all(sql, [month], (err, result) => {
+            if (err) {
+                reject("incidentCount function: Error while fetching data!");
+            }
+            resolve(result)
+        });
     });
 }
 
-const requestCount = (month, callback) => {
-    const sql = "SELECT TICKET COUNT_ FROM tickets where MON = ?  and TICKET_TYPE = 'Service Request'";
+const requestCount = (month) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT TICKET COUNT_ FROM tickets where MON = ?  and TICKET_TYPE = 'Service Request'";
 
-    database.appDatabase.all(sql, [month], (err, result) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(result)
+        database.appDatabase.all(sql, [month], (err, result) => {
+            if (err) {
+                reject("requestCount function: Error while fetching data!");
+            }
+            resolve(result)
+        });
     });
 }
 
@@ -278,6 +312,7 @@ module.exports = {
     putResolution,
     delResolution,
     getAllDistinctMonths,
+    getAllDistinctMonthsNew,
     exportMonthRange
 };
 
