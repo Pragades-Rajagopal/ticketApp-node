@@ -351,12 +351,16 @@ async function getExportPage(req, res) {
     }
 }
 
-function exportForRange(req, res) {
+async function exportForRange(req, res) {
 
-    const from = req.body.FROM;
-    const to = req.body.TO;
+    try {
 
-    appModel.getMonths((result) => {
+        const from = req.body.FROM;
+        const to = req.body.TO;
+
+        const result = await appModel.getMonthsNew();
+        const allMonths = await appModel.getAllDistinctMonthsNew();
+
         let month = [];
         let rev_month = [];
         for (let i = 0; i < result.length; i++) {
@@ -369,53 +373,48 @@ function exportForRange(req, res) {
         const indexofTo = month.indexOf(to);
 
         if (indexofTo > indexOfFrom) {
-            appModel.getAllDistinctMonths((allMonths) => {
-                const monthFrom = allMonths[allMonths.length - 1];
-                const monthTo = allMonths[0];
+            const monthFrom = allMonths[allMonths.length - 1];
+            const monthTo = allMonths[0];
 
-                res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: 'FROM MONTH SHOULD BE LESS THAN TO MONTH!', filename: null });
-            });
+            res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: 'FROM MONTH SHOULD BE LESS THAN TO MONTH!', filename: null });
 
             return;
         }
         else {
             const monthRange = month.slice(indexofTo, indexOfFrom + 1);
 
-            appModel.exportMonthRange(monthRange, (output) => {
+            const output = await appModel.exportMonthRange(monthRange);
 
-                const filePath = exportFilePath;
-                let time = moment.utc().format('YYYYMMDDhhmmss');
-                const filename = 'ticket_rng_' + time + '.csv';
-                const endPath = filePath + exportDirLink + filename;
-                // console.log(endPath);
+            const filePath = exportFilePath;
+            let time = moment.utc().format('YYYYMMDDhhmmss');
+            const filename = 'ticket_rng_' + time + '.csv';
+            const endPath = filePath + exportDirLink + filename;
+            // console.log(endPath);
 
-                var ws = fs.createWriteStream(endPath);
-                fastcsv.write(output, { headers: true })
-                    .on("finish", () => {
+            var ws = fs.createWriteStream(endPath);
+            fastcsv.write(output, { headers: true })
+                .on("finish", () => {
 
-                        appModel.getAllDistinctMonths((allMonths) => {
-                            const monthFrom = allMonths[allMonths.length - 1];
-                            const monthTo = allMonths[0];
+                    const monthFrom = allMonths[allMonths.length - 1];
+                    const monthTo = allMonths[0];
 
-                            res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: filename });
-                        });
-                    })
-                    .pipe(ws);
-            });
+                    res.render('exportpage', { month: month, rev_month: rev_month, monthFrom: monthFrom, monthTo: monthTo, actionmsg: null, filename: filename });
+                })
+                .pipe(ws);
 
             console.log(`[${getTime()}]: Exported data for month range: [${monthRange}]`);
         }
-    });
+    } catch (error) {
+
+    }
 }
 
-function configurations_get(req, res) {
+async function configurations_get(req, res) {
+    const resolution = await appModel.ticketCategoryNew();
+    const month = await appModel.getMonthsNew();
 
-    appModel.ticketCategory((resolution) => {
-        appModel.getMonths((month) => {
-            res.locals.title = "Ticket Tool - Configurations";
-            res.render('config', { MONTH: month, resolution: resolution, errors: {}, actionmsg: null });
-        });
-    });
+    res.locals.title = "Ticket Tool - Configurations";
+    res.render('config', { MONTH: month, resolution: resolution, errors: {}, actionmsg: null });
 };
 
 function newResolution_put(req, res) {

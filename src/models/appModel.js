@@ -211,18 +211,19 @@ const exportMonth = (mon) => {
 };
 
 const exportMonthRange = (mon, callback) => {
-    // This function will frame the sql query based on the input passed from exportForRange() with array of months
-    const selectClause = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE";
-    const orderClause = "ORDER BY TICKET DESC";
-    var whereClause = ' MON IN (\"' + mon.join("\",\"") + '\")';
-    const sql = selectClause + whereClause + orderClause;
+    return new Promise((resolve, reject) => {
+        // This function will frame the sql query based on the input passed from exportForRange() with array of months
+        const selectClause = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE";
+        const orderClause = "ORDER BY TICKET DESC";
+        var whereClause = ' MON IN (\"' + mon.join("\",\"") + '\")';
+        const sql = selectClause + whereClause + orderClause;
 
-    database.appDatabase.all(sql, [], (err, rows) => {
-        if (err) {
-            callback(err.message);
-        }
-
-        callback(rows);
+        database.appDatabase.all(sql, [], (err, rows) => {
+            if (err) {
+                reject('exportMonthRange function: Error while fetching data!');
+            }
+            resolve(rows);
+        });
     });
 };
 
