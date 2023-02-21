@@ -69,15 +69,7 @@ const searchTicket = (ticket) => {
     });
 };
 
-const ticketCategory = (callback) => {
-    const sql = "SELECT * FROM resolutions";
-
-    database.appDatabase.all(sql, [], (err, rows) => {
-        callback(rows);
-    });
-};
-
-const ticketCategoryNew = () => {
+const ticketCategory = () => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM resolutions";
 
@@ -90,63 +82,60 @@ const ticketCategoryNew = () => {
     });
 };
 
-const searchResolution = (resol, callback) => {
-    const sql = "SELECT * FROM resolutions WHERE CATEGORY = ?";
+const searchResolution = (resol) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM resolutions WHERE CATEGORY = ?";
 
-    database.appDatabase.all(sql, [resol], (err, row) => {
-        callback(row);
-    })
-};
-
-const putResolution = (action, resolution, comment, category, callback) => {
-
-    if (action === 'UPDATE') {
-        const sql = "UPDATE resolutions SET COMMENT = ?, TYPE = ? WHERE CATEGORY = ?";
-
-        database.appDatabase.run(sql, [comment, category, resolution], (err) => {
+        database.appDatabase.all(sql, [resol], (err, row) => {
             if (err) {
-                callback(err.message);
+                reject('ticketCategory function: Error while fetching data!');
             }
-            callback('success');
-        });
-    }
-    else if (action === 'INSERT') {
-        const sql = "INSERT INTO resolutions (CATEGORY, COMMENT, TYPE) VALUES(?, ?, ?)";
-
-        database.appDatabase.run(sql, [resolution, comment, category], (err) => {
-            if (err) {
-                callback(err.message);
-            }
-            callback('success');
-        });
-    }
-
-};
-
-const delResolution = (resolution, callback) => {
-    const sql = "DELETE FROM resolutions WHERE CATEGORY = ?";
-
-    database.appDatabase.run(sql, [resolution], (err) => {
-        if (err) {
-            callback(err.message);
-        }
-        callback('success');
+            resolve(row);
+        })
     });
 };
 
-const getMonths = (callback) => {
+const upsertResolution = (action, data) => {
+    return new Promise((resolve, reject) => {
 
-    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC LIMIT 12";
+        if (action === 'UPDATE') {
+            const sql = "UPDATE resolutions SET COMMENT = ?, TYPE = ? WHERE CATEGORY = ?";
 
-    database.appDatabase.all(sql, [], (err, row) => {
-        if (err) {
-            callback(err.message);
+            database.appDatabase.run(sql, [data.comment, data.category, data.resolution], (err) => {
+                if (err) {
+                    reject('upsertResolution function: Error while updating data!');
+                }
+                resolve('success');
+            });
         }
-        callback(row);
+        else if (action === 'INSERT') {
+            const sql = "INSERT INTO resolutions (CATEGORY, COMMENT, TYPE) VALUES(?, ?, ?)";
+
+            database.appDatabase.run(sql, [data.resolution, data.comment, data.category], (err) => {
+                if (err) {
+                    reject('upsertResolution function: Error while inserting data!');
+                }
+                resolve('success');
+            });
+        }
+    });
+
+};
+
+const delResolution = (resolution) => {
+    return new Promise((resolve, reject) => {
+        const sql = "DELETE FROM resolutions WHERE CATEGORY = ?";
+
+        database.appDatabase.run(sql, [resolution], (err) => {
+            if (err) {
+                reject('delResolution function: Error while deleting resolution!');
+            }
+            resolve('success');
+        });
     });
 };
 
-const getMonthsNew = () => {
+const getMonths = () => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC LIMIT 12";
 
@@ -159,19 +148,7 @@ const getMonthsNew = () => {
     });
 };
 
-const getAllDistinctMonths = (callback) => {
-
-    const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC";
-
-    database.appDatabase.all(sql, [], (err, row) => {
-        if (err) {
-            callback(err.message);
-        }
-        callback(row);
-    });
-};
-
-const getAllDistinctMonthsNew = () => {
+const getAllDistinctMonths = () => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT DISTINCT MON FROM tickets ORDER BY TICKET_NEW DESC";
 
@@ -297,23 +274,20 @@ const requestCount = (month) => {
 module.exports = {
     insertTicket,
     ticketCategory,
-    ticketCategoryNew,
     exportAllCSV,
     searchTicket,
     exportMonth,
     getData,
     updateTicket,
     getMonths,
-    getMonthsNew,
     incidentCount,
     requestCount,
     getAllData,
     getDataByCategory,
     searchResolution,
-    putResolution,
+    upsertResolution,
     delResolution,
     getAllDistinctMonths,
-    getAllDistinctMonthsNew,
     exportMonthRange
 };
 
