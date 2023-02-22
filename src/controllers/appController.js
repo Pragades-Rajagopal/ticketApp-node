@@ -14,7 +14,7 @@ const { exportDirLink, exportFilePath } = require('../config/ioconfig');
 const logfileName = logfilePath.filePath;
 console.file(logfileName);
 
-const getTime = () => String(moment.utc().format('YYYY/MM/DD hh:mm:ss')) + ' GMT';
+const getTime = () => String(moment().utcOffset("+05:30").format('YYYY/MM/DD hh:mm:ss')) + ' IST';
 
 async function index_page_get(req, res) {
 
@@ -25,7 +25,7 @@ async function index_page_get(req, res) {
         res.locals.title = "Ticket Tool";
         res.render('index', { resolution: resolution, app_nm: conf.app_nm, users_: conf.users, errors: {}, MONTH: month, actionmsg: null, filename: null });
     } catch (error) {
-        console.log(`[${getTime()}]: controller:index_page_post function | error: ${error}`);
+        console.log(`[${getTime()}]: controller:index_page_get function | error: ${error}`);
     }
 };
 
@@ -44,14 +44,14 @@ async function index_page_post(req, res) {
         }
 
         let postdata = {
-            TICKET: req.body.Ticket,
+            TICKET: String(req.body.Ticket).trim(), // trim leading and trailing blankspaces
             DESCR: req.body.DESCR,
             CATEGORY: req.body.CATEGORY,
             COMMENT: req.body.COMMENT,
             USER: req.body.USER,
             APP: req.body.APP,
-            CREATED_ON: moment.utc().format('YYYY/MM/DD hh:mm:ss'),
-            MON: moment.utc().format('MMMYYYY'),
+            CREATED_ON: moment().utcOffset("+05:30").format('YYYY/MM/DD hh:mm:ss'),
+            MON: moment().utcOffset("+05:30").format('MMMYYYY'),
         }
 
         /*
@@ -62,7 +62,7 @@ async function index_page_post(req, res) {
         if (checkValue === false) {
             const actionmsg = "Ticket number contains (special) characters!";
     
-            let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+            let timestamp = moment().utc().format('YYYY/MM/DD hh:mm:ss');
             console.log(`[${timestamp}]: Ticket "${TICKET}" contains character and action failed to post the data. [Responsible user: ${USER}]`);
     
             res.locals.title = "Ticket Tool";
@@ -253,7 +253,7 @@ async function exportAllCSV(req, res) {
         const months = await appModel.getMonths();
 
         const filePath = exportFilePath;
-        let time = moment.utc().format('YYYYMMDDhhmmss');
+        let time = moment().utcOffset("+05:30").format('YYYYMMDDhhmmss');
         const filename = 'ticketAll_' + time + '.csv';
         const endPath = filePath + exportDirLink + filename;
         // console.log(endPath);
@@ -296,7 +296,7 @@ async function exportSelectedMonth(req, res) {
         const result = await appModel.exportMonth(MON);
 
         const filePath = exportFilePath;
-        let time = moment.utc().format('YYYYMMDDhhmmss');
+        let time = moment().utcOffset("+05:30").format('YYYYMMDDhhmmss');
         const filename = 'ticket_' + MON + '_' + time + '.csv';
         const endPath = filePath + exportDirLink + filename;
         // console.log(endPath);
@@ -386,7 +386,7 @@ async function exportForRange(req, res) {
             const output = await appModel.exportMonthRange(monthRange);
 
             const filePath = exportFilePath;
-            let time = moment.utc().format('YYYYMMDDhhmmss');
+            let time = moment().utcOffset("+05:30").format('YYYYMMDDhhmmss');
             const filename = 'ticket_rng_' + time + '.csv';
             const endPath = filePath + exportDirLink + filename;
             // console.log(endPath);

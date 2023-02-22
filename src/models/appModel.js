@@ -88,7 +88,7 @@ const searchResolution = (resol) => {
 
         database.appDatabase.all(sql, [resol], (err, row) => {
             if (err) {
-                reject('ticketCategory function: Error while fetching data!');
+                reject('searchResolution function: Error while fetching data!');
             }
             resolve(row);
         })
@@ -187,7 +187,7 @@ const exportMonth = (mon) => {
     });
 };
 
-const exportMonthRange = (mon, callback) => {
+const exportMonthRange = (mon) => {
     return new Promise((resolve, reject) => {
         // This function will frame the sql query based on the input passed from exportForRange() with array of months
         const selectClause = "SELECT TICKET_NEW \"Ticket_ID\", APP_NM \"Application\", TICKET_TYPE \"IM/SRQ\", RESOLUTION \"Category\", COMMENT \"RCA/Remarks\", CREATED_ON, MON, RESOLVED_BY FROM tickets WHERE";
