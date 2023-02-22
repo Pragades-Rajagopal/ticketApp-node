@@ -1,3 +1,4 @@
+const startTime = Date.now();
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
@@ -28,9 +29,12 @@ app.get('/check', (req, res) => {
 
 app.use(appRoutes);
 
-let timestamp = moment.utc().format('YYYY/MM/DD hh:mm:ss');
+const getTime = () => String(moment().utcOffset("+05:30").format('YYYY/MM/DD hh:mm:ss')) + ' IST';
 
 app.listen(PORT, () => {
-    console.log(`[${timestamp}]: Application is running in port: ${PORT}`);
+    console.log(`[${getTime()}]: Application is running in port: ${PORT}`);
+    const stopTime = Date.now();
+    const elapsedTime = (stopTime - startTime) / 1000;
+    console.log(`[${getTime()}]: Application startup time: ${elapsedTime}s`);
 });
 
