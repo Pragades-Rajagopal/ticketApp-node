@@ -4,7 +4,7 @@ require('../utils/writetoLogs');
 const moment = require('moment');
 const logfilePath = require('../utils/createLogfile');
 
-let timestamp = String(moment.utc().format('YYYY/MM/DD hh:mm:ss')) + ' GMT';
+let timestamp = String(moment().utcOffset("+05:30").format('YYYY/MM/DD hh:mm:ss')) + ' IST';
 
 const logfileName = logfilePath.filePath;
 console.file(logfileName);
